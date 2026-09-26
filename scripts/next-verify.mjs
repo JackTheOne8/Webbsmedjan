@@ -1,0 +1,87 @@
+import { chromium } from 'playwright';
+import { mkdir } from 'node:fs/promises';
+import axe from 'axe-core';
+
+const base = process.env.BASE_URL || 'http://127.0.0.1:4180';
+const browser = await chromium.launch({ channel: process.platform === 'win32' ? 'msedge' : undefined, headless: true });
+const failures = [];
+const check = (ok, message) => { if (!ok) failures.push(message); };
+await mkdir('qa/next', { recursive: true });
+for (const [name, width, height] of [['desktop', 1440, 900], ['mobile', 390, 844]]) {
+  const page = await browser.newPage({ viewport: { width, height }, reducedMotion: 'reduce' });
+  const errors = [];
+  page.on('pageerror', error => errors.push(error.message));
+  await page.goto(base, { waitUntil: 'networkidle' });
+  check(await page.locator('h1').count() === 1, `${name}: h1`);
+  check(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth), `${name}: horizontal overflow`);
+  await page.getByRole('button', { name: 'Endast nödvändiga' }).click();
+  check(await page.evaluate(() => JSON.parse(localStorage.getItem('webbsmedjan-cookie-choice-v1')).statistics === false), `${name}: cookie choice`);
+  await page.screenshot({ path: `qa/next/${name}-home.png`, fullPage: true });
+  check(await page.locator('.logo-plate img').evaluate(image => image.complete && image.naturalWidth > 0), `${name}: logo loads`);
+  await page.goto(`${base}/tjanster`, { waitUntil: 'networkidle' });
+  check(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth), `${name}: services overflow`);
+  await page.screenshot({ path: `qa/next/${name}-services.png`, fullPage: true });
+  await page.goto(`${base}/om-oss`, { waitUntil: 'networkidle' });
+  check(await page.locator('.about-symbol img').evaluate(image => image.complete && image.naturalWidth > 0), `${name}: about logo loads`);
+  await page.screenshot({ path: `qa/next/${name}-about.png`, fullPage: true });
+  await page.goto(base, { waitUntil: 'networkidle' });
+  await page.getByRole('button', { name: 'Cookieinställningar' }).click();
+  await page.getByRole('checkbox', { name: /Statistik/ }).check();
+  await page.getByRole('button', { name: 'Spara inställningar' }).click();
+  check(await page.evaluate(() => JSON.parse(localStorage.getItem('webbsmedjan-cookie-choice-v1')).statistics === true), `${name}: detailed cookie settings`);
+  await page.evaluate(axe.source);
+  const homeAxe = await page.evaluate(() => window.axe.run(document, { runOnly: { type: 'tag', values: ['wcag2a', 'wcag2aa', 'wcag21aa'] } }));
+  check(homeAxe.violations.length === 0, `${name}: home accessibility ${homeAxe.violations.map(v => v.id).join(', ')}`);
+  if (name === 'mobile') { await page.getByRole('button', { name: /Meny/ }).click(); check(await page.getByRole('navigation', { name: 'Huvudmeny' }).isVisible(), 'mobile: menu'); }
+  await page.goto(`${base}/bestall`, { waitUntil: 'networkidle' });
+  check(await page.getByText('19 900 kr').count() > 0, `${name}: default total`);
+  await page.getByText('Premium', { exact: true }).first().click();
+  await page.getByText('SEO-fördjupning', { exact: true }).first().click();
+  check(await page.getByText('38 800 kr').count() > 0, `${name}: updated total`);
+  await page.screenshot({ path: `qa/next/${name}-order.png`, fullPage: true });
+  await page.getByRole('button', { name: /Skicka beställningsförfrågan/ }).click();
+  check(await page.getByText('Ange ditt namn.').isVisible(), `${name}: validation`);
+  await page.getByPlaceholder('För- och efternamn').fill('Anna Andersson');
+  await page.getByPlaceholder('namn@foretag.se').fill('anna@example.com');
+  await page.getByPlaceholder('Företagets namn').fill('Exempelföretaget AB');
+  await page.getByPlaceholder('Vad vill ni skapa? Vad behöver webbplatsen hjälpa er med?').fill('Vi vill skapa en tydlig webbplats för vårt företag.');
+  await page.getByRole('checkbox', { name: /Jag godkänner/ }).check();
+  await page.getByRole('button', { name: /Skicka beställningsförfrågan/ }).click();
+  check(await page.getByText(/Ingen e-post har skickats/).waitFor({ state: 'visible', timeout: 5000 }).then(() => true).catch(() => false), `${name}: valid order state`);
+  await page.evaluate(axe.source);
+  const orderAxe = await page.evaluate(() => window.axe.run(document, { runOnly: { type: 'tag', values: ['wcag2a', 'wcag2aa', 'wcag21aa'] } }));
+  check(orderAxe.violations.length === 0, `${name}: order accessibility ${orderAxe.violations.map(v => v.id).join(', ')}`);
+  check(errors.length === 0, `${name}: ${errors.join('; ')}`);
+  await page.close();
+}
+const page = await browser.newPage();
+const motionPage = await browser.newPage({ viewport: { width: 1440, height: 900 }, reducedMotion: 'no-preference' });
+await motionPage.goto(base, { waitUntil: 'networkidle' });
+await motionPage.getByRole('button', { name: 'Endast nödvändiga' }).click();
+const beforeProgress = await motionPage.locator('.scroll-progress').evaluate(element => new DOMMatrix(getComputedStyle(element).transform).a);
+await motionPage.evaluate(() => scrollTo(0, document.body.scrollHeight * .72));
+await motionPage.waitForTimeout(600);
+const afterProgress = await motionPage.locator('.scroll-progress').evaluate(element => new DOMMatrix(getComputedStyle(element).transform).a);
+check(afterProgress > beforeProgress + .3, 'scroll progress responds to scroll');
+await motionPage.close();
+for (const route of ['/tjanster', '/om-oss', '/kontakt', '/referenser', '/integritet', '/cookies', '/villkor', '/sitemap.xml', '/robots.txt']) {
+  const response = await page.goto(`${base}${route}`);
+  check(response?.status() === 200, `${route}: HTTP ${response?.status()}`);
+}
+await page.goto(`${base}/kontakt`);
+await page.getByRole('button', { name: 'Endast nödvändiga' }).click();
+await page.getByRole('button', { name: /Skicka förfrågan/ }).click();
+check(await page.getByText('Ange ditt namn.').isVisible(), 'contact validation');
+await page.getByPlaceholder('För- och efternamn').fill('Anna Andersson');
+await page.getByPlaceholder('namn@foretag.se').fill('anna@example.com');
+await page.getByPlaceholder('Företagets namn').fill('Exempelföretaget AB');
+await page.getByPlaceholder('Vad vill ni skapa? Vad behöver webbplatsen hjälpa er med?').fill('Vi vill skapa en tydlig webbplats för vårt företag.');
+await page.getByRole('checkbox', { name: /Jag godkänner/ }).check();
+await page.getByRole('button', { name: /Skicka förfrågan/ }).click();
+check(await page.getByText(/Ingen e-post har skickats/).waitFor({ state: 'visible', timeout: 5000 }).then(() => true).catch(() => false), 'contact valid state');
+check((await page.goto(`${base}/saknas`))?.status() === 404, '404 HTTP status');
+const bad = await page.request.post(`${base}/api/order`, { data: { packageId: 'fake' } });
+check(bad.status() === 400, 'invalid order API');
+await browser.close();
+if (failures.length) { console.error(failures.join('\n')); process.exit(1); }
+console.log('Desktop, mobile, order, consent, routes and API checks passed.');

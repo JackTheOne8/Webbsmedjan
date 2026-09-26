@@ -1,0 +1,8 @@
+'use client';
+import Link from 'next/link';
+import type { FieldErrors, UseFormRegister } from 'react-hook-form';
+import type { ContactValues } from '@/lib/schemas';
+type Fields = ContactValues & { packageId?: string; addons?: string[] };
+export function InquiryFields<T extends Fields>({ register, errors }: { register: UseFormRegister<T>; errors: FieldErrors<T> }) {
+  return <div className="form-grid"><label> Ditt namn <input {...register('name' as never)} autoComplete="name" aria-invalid={!!errors.name} placeholder="För- och efternamn"/><span className="field-error">{errors.name?.message as string}</span></label><label> E-postadress <input {...register('email' as never)} type="email" autoComplete="email" aria-invalid={!!errors.email} placeholder="namn@foretag.se"/><span className="field-error">{errors.email?.message as string}</span></label><label className="full"> Företag <input {...register('company' as never)} autoComplete="organization" aria-invalid={!!errors.company} placeholder="Företagets namn"/><span className="field-error">{errors.company?.message as string}</span></label><label className="full"> Berätta om ert projekt <textarea {...register('message' as never)} rows={5} aria-invalid={!!errors.message} placeholder="Vad vill ni skapa? Vad behöver webbplatsen hjälpa er med?"/><span className="field-error">{errors.message?.message as string}</span></label><div className="full"><label className="check-line"><input {...register('consent' as never)} type="checkbox" aria-invalid={!!errors.consent}/><span>Jag godkänner att mina uppgifter behandlas för att hantera förfrågan. <Link href="/integritet">Läs integritetspolicyn.</Link></span></label><span className="field-error">{errors.consent?.message as string}</span></div></div>;
+}
