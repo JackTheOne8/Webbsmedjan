@@ -2,7 +2,7 @@
 
 ## Identitet
 
-Digital smedja: kallt stål möter varm glöd. Den av användaren tillhandahållna JPEG-loggan är original och visas oförändrad på ljus platta i hero och om oss. Navigationen visar en beskuren vy av dess emblem. Den återkommande orange färgen kommer från loggans text.
+Digital smedja: kallt stål möter varm glöd. Den av användaren tillhandahållna JPEG-loggan är original och visas oförändrad på sidan Om oss. Navigationen visar en beskuren vy av dess emblem. Heron använder en egen mörk smedjebild med glödande plåt. Den återkommande orange färgen kommer från loggans text.
 
 ## Tokens
 
@@ -12,11 +12,12 @@ Typografi: kondenserad systemdisplay (`Arial Narrow`/`Bahnschrift`), neutral san
 
 ## Rörelse
 
-En tunn scrollindikator följer hela sidan. På startsidan rör sig loggplattan lätt mot scrollen och processens glödlinje fylls i läsordning. Övriga avsnitt får en kort positionsentré utan att innehållet döljs. Hover ger lokal respons på knappar, tjänsterader och kort. `prefers-reduced-motion` tar bort den rumsliga rörelsen; innehåll och val är alltid synliga.
+En tunn scrollindikator följer hela sidan. På startsidan rör sig hero-bilden lätt mot scrollen och processens glödlinje fylls i läsordning. Övriga avsnitt får en kort positionsentré utan att innehållet döljs. Hover ger lokal respons på knappar, tjänsterader och kort. `prefers-reduced-motion` tar bort den rumsliga rörelsen; innehåll och val är alltid synliga.
 
 ## Principer
 
 - Originalbilden får inte ritas om eller ersättas med påhittad logotyptext.
 - Inga påhittade kundcase, recensioner eller resultatmått. Koncept märks som koncept.
+- Konceptkorten visar fiktiva webbplatser för olika verksamheter. De har egna bildvärldar och namnges tydligt som idéer, inte levererade projekt.
 - Formulär och orderflöde förblir tydliga och tangentbordsanvändbara.
 - Kontrast, fokus och mobilbredd prioriteras före dekorativa effekter.

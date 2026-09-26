@@ -17,7 +17,8 @@ for (const [name, width, height] of [['desktop', 1440, 900], ['mobile', 390, 844
   await page.getByRole('button', { name: 'Endast nödvändiga' }).click();
   check(await page.evaluate(() => JSON.parse(localStorage.getItem('webbsmedjan-cookie-choice-v1')).statistics === false), `${name}: cookie choice`);
   await page.screenshot({ path: `qa/next/${name}-home.png`, fullPage: true });
-  check(await page.locator('.logo-plate img').evaluate(image => image.complete && image.naturalWidth > 0), `${name}: logo loads`);
+  check(await page.locator('.hero-photo img').evaluate(image => image.complete && image.naturalWidth > 0), `${name}: hero image loads`);
+  check(await page.locator('.concept-card').count() === 2, `${name}: homepage concepts`);
   await page.goto(`${base}/tjanster`, { waitUntil: 'networkidle' });
   check(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth), `${name}: services overflow`);
   await page.screenshot({ path: `qa/next/${name}-services.png`, fullPage: true });
