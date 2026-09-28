@@ -2,7 +2,7 @@
 
 ## Identitet
 
-Digital smedja: kallt stål möter varm glöd. Den av användaren tillhandahållna JPEG-loggan är original och visas oförändrad på sidan Om oss. Navigationen visar en beskuren vy av dess emblem. Heron använder en egen mörk smedjebild med glödande plåt. Den återkommande orange färgen kommer från loggans text.
+Digital smedja: kallt stål möter varm glöd. Den av användaren tillhandahållna JPEG-loggan är original och visas oförändrad på sidan Om oss. Navigationen visar en beskuren vy av dess emblem. Heron visar användarens video där en laptop öppnas och visar en webbplats; videon loopar, har en stillbild medan den laddar och kan pausas. Den återkommande orange färgen kommer från loggans text.
 
 ## Tokens
 
@@ -12,7 +12,7 @@ Typografi: kondenserad systemdisplay (`Arial Narrow`/`Bahnschrift`), neutral san
 
 ## Rörelse
 
-En tunn scrollindikator följer hela sidan. På startsidan rör sig hero-bilden lätt mot scrollen och processens glödlinje fylls i läsordning. Övriga avsnitt får en kort positionsentré utan att innehållet döljs. Hover ger lokal respons på knappar, tjänsterader och kort. `prefers-reduced-motion` tar bort den rumsliga rörelsen; innehåll och val är alltid synliga.
+En tunn scrollindikator följer hela sidan. Hero-videon spelas automatiskt utan ljud och loopar. Vid `prefers-reduced-motion` pausas den och kan startas manuellt. Processens glödlinje fylls i läsordning. Övriga avsnitt får en kort positionsentré utan att innehållet döljs. Hover ger lokal respons på knappar, tjänsterader och kort. Innehåll och val är alltid synliga.
 
 ## Principer
 

@@ -155,6 +155,11 @@ body {
 .hero-art-bottom { bottom: 32px; display: grid; gap: 7px; text-shadow: 0 3px 18px #000; }
 .hero-art-bottom span { color: #ffad6f; font-size: 10px; font-weight: 800; letter-spacing: .19em; }
 .hero-art-bottom strong { font-family: Bahnschrift, 'Arial Narrow', Arial, sans-serif; font-size: clamp(26px, 3.2vw, 44px); line-height: 1; letter-spacing: -.035em; }
+.hero-art-video { background: #0b1316; }
+.hero-art-video::after { inset: 0 0 auto; height: 32%; background: linear-gradient(#071015a3, transparent); pointer-events: none; }
+.hero-video { display: block; width: 100%; height: 100%; object-fit: cover; object-position: center; }
+.hero-video-toggle { flex: none; min-height: 44px; padding: 0 13px; border: 1px solid #f7e7d89c; background: #10191dd9; color: #fff4eb; font-size: 10px; font-weight: 800; letter-spacing: .09em; cursor: pointer; transition: background .2s, border-color .2s; }
+.hero-video-toggle:hover { background: #26343a; border-color: #f27624; }
 .concept-card { min-width: 0; background: #19272c; border: 1px solid #53666a; overflow: hidden; transition: border-color .25s, transform .3s, box-shadow .3s; scroll-margin-top: 110px; }
 .concept-card:hover { transform: translateY(-5px); border-color: #d68653; box-shadow: 0 20px 46px #0006; }
 .concept-link { display: block; height: 100%; }
@@ -238,6 +243,7 @@ body {
   .hero-art-bottom { bottom: 20px; }
   .hero-art-bottom strong { font-size: 30px; }
   .hero-photo img { object-position: 50% 50%; }
+  .hero-video { object-position: center; }
   .concept-preview { height: 290px; }
   .concept-hero-copy { top: 32%; width: 50%; }
   .concept-hero-copy strong { font-size: 34px; }
