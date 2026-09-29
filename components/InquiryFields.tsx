@@ -1,5 +1,5 @@
 'use client';
-import Link from 'next/link';
+import Link from '@/components/SafeLink';
 import type { FieldErrors, UseFormRegister } from 'react-hook-form';
 import type { ContactValues } from '@/lib/schemas';
 type Fields = ContactValues & { packageId?: string; addons?: string[] };

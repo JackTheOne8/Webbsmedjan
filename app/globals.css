@@ -12,3 +12,14 @@
 @media(max-width:380px){.shell{width:min(100% - 28px,1240px)}.brand{font-size:12px}.hero h1,.page-hero h1{font-size:45px}.actions{align-items:flex-start;flex-direction:column}.ticker{font-size:10px}.ticker span{padding-inline:8px}.addon-row{grid-template-columns:20px 1fr}.addon-row b{grid-column:2}}
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important;scroll-behavior:auto!important}}
 
+
+/* Keep consent controls available without blocking the rest of the site. */
+.cookie-backdrop {
+  background: none;
+  pointer-events: none;
+}
+.cookie-panel {
+  max-height: calc(100vh - 40px);
+  overflow-y: auto;
+  pointer-events: auto;
+}

@@ -11,7 +11,8 @@
     "build:next": "next build",
     "start:next": "next start -p 4180",
     "check": "tsc --noEmit",
-    "verify": "node scripts/next-verify.mjs"
+    "verify": "node scripts/next-verify.mjs",
+    "verify:links": "node scripts/link-verify.mjs"
   },
   "devDependencies": {
     "@cloudflare/vite-plugin": "^1.37.1",

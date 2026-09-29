@@ -1,4 +1,4 @@
-import Link from 'next/link';
+import Link from '@/components/SafeLink';
 import { Reveal } from '@/components/Reveal';
 import { ForgeVisual } from '@/components/ForgeVisual';
 import { ForgeTimeline } from '@/components/ForgeTimeline';

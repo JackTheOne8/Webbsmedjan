@@ -22,6 +22,6 @@ npm.cmd run dev
 - `lib/`: gemensamt innehåll, priser och zod-scheman.
 - `public/`: favicon och Open Graph-bild.
 
-Beställning och kontakt har avsiktligt API-stubbar. De validerar men skickar eller lagrar ingenting. Riktiga företagsuppgifter, färdiga juridiska texter, beslutad prislista samt e-postleverans med serverhemligheter och skydd mot missbruk behövs för att göra erbjudandet komplett. Produktionsbygget tillåter indexering; sätt `NEXT_PUBLIC_SITE_INDEXABLE=false` om en förhandsversion inte ska hittas av sökmotorer. Sites-adressen används för sitemap och metadata. Sätt `NEXT_PUBLIC_SITE_URL` om adressen ändras.
+Beställning och kontakt har avsiktligt API-stubbar. De validerar men skickar eller lagrar ingenting. Riktiga företagsuppgifter, färdiga juridiska texter, beslutad prislista samt e-postleverans med serverhemligheter och skydd mot missbruk behövs för att göra erbjudandet komplett. Produktionsbygget tillåter indexering; sätt `NEXT_PUBLIC_SITE_INDEXABLE=false` om en förhandsversion inte ska hittas av sökmotorer. `https://webbsmedjan.com` används som standard för sitemap, canonical och metadata. Sätt `NEXT_PUBLIC_SITE_URL` om adressen ändras.
 
 Den äldre statiska versionen finns kvar i `src/`, `build.mjs` och `dist/` som referens. Next.js använder inte dem.
