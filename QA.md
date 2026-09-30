@@ -79,3 +79,13 @@ Första dator- och mobilbilderna visade att tjänstesidan hade för långt tomru
 Kortade mellanrummet före CTA:n och gav tjänsteraderna en diskret scrollentré. Använde originalbilden även på Om oss och i Open Graph. Nya bilder på startsida, tjänster, beställning och Om oss vid 1440 och 390 px visade inget horisontellt överflöde. Logotypen laddades på startsida och Om oss. `npm.cmd run check`, `npm.cmd run build` och `npm.cmd run verify` gick igenom efter ändringarna. Skärmbilder finns i `qa/next/`.
 
 Minskad rörelse behåller läsbarhet och statisk loggplatta. Fysiska telefoner och andra webbläsare än testmiljön har inte kontrollerats i denna omgång.
+
+## UF-beställning, 2026-09-30
+
+Omgång 1: implementerade UF-switch, separata priser, Animationer, kompaktare paket och tillval samt kortare text på startsida och kontakt. Granskade skärmbilder vid 1440 och 390 px. Lokala mejltester bekräftade mottagare, företagstyp och serverberäknade priser: Premium + SEO + extra sida + animationer = 1 550 kr för UF och 8 100 kr för företag.
+
+Omgång 2: lade mobilens totalpris före skicka-knappen och rättade testerna för svenska fasta tusentalsmellanslag. Nya skärmbilder granskades. `npm.cmd run check`, `npm.cmd run build`, `npm.cmd run verify` och `npm.cmd run verify:email` gick igenom. Tester täcker tangentbord, bibehållna kunduppgifter/tillval, API-payload, formulärvalidering, simulerad framgång, serverns leveransfel och WCAG A/AA via axe. Inga horisontella överflöden eller axe-fel i dator- och mobilvyn.
+
+Frontend Premium statisk audit kördes i strict med app/components/lib som aktiva källrötter. Två begränsningar kvar i statisk analys: den upptäcker inte CookieConsents befintliga event listener på sidfotens cookieknapp (funktion verifierad i browser-test), och den vill förbjuda textarea-resize som här medvetet behålls. Äldre ignorerad src/ används inte av den publicerade Vinext-appen.
+
+Skärmbilder: qa/next/desktop-order.png och mobile-order.png. Mejlleverans är simulerad i denna ändringsomgång; inga nya kundmejl skickades. Verklig Cloudflare-leverans till Gmail verifierades av användaren i föregående omgång. Fysiska telefoner har inte testats.

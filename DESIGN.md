@@ -21,3 +21,13 @@ En tunn scrollindikator följer hela sidan. Hero-videon spelas automatiskt utan 
 - Konceptkorten visar fiktiva webbplatser för olika verksamheter. De har egna bildvärldar och namnges tydligt som idéer, inte levererade projekt.
 - Formulär och orderflöde förblir tydliga och tangentbordsanvändbara.
 - Kontrast, fokus och mobilbredd prioriteras före dekorativa effekter.
+
+## Beställning – UF och företag
+
+`OrderBuilder` äger paketval, UF-reglage och sammanfattning. `InquiryFields` är gemensam för beställning och kontakt. `lib/site.ts` äger priserna som både gränssnittet och mejlservern använder; klientens totalpris accepteras aldrig som priskälla.
+
+UF-reglaget är avstängt från början. Bas/Standard/Premium kostar 350/700/1 200 kr för UF och 2 000/4 000/6 500 kr för företag. Tillval kostar 75–250 kr respektive 400–1 200 kr. Animationer kostar 150 kr för UF och 600 kr för företag. Priser är exklusive moms och förfrågan bekräftas med offert.
+
+Ett byte behåller paket, tillval och kontaktuppgifter. Reglagets tumme har en kort fjädrande rörelse och priser byts med en 180 ms entré; minskad rörelse ger direkt byte. Native radio/checkbox, ett namngivet ARIA-switch-reglage och en uppläst totalsumma bevarar tangentbordsflödet. Mobilen visar totalpris före skicka-knappen.
+
+Texten hålls kort på startsida, beställning och kontakt; samtycke, offertinformation och konceptmärkning behålls. Textfältet behåller native storleksändring för längre projektbeskrivningar. Cookieknappen använder befintlig händelselyssnare i `CookieConsent`.

@@ -11,7 +11,8 @@ export const contactSchema = z.object({
 export type ContactValues = z.infer<typeof contactSchema>;
 
 export const orderSchema = contactSchema.extend({
+  isUf: z.boolean().optional(),
   packageId: z.enum(['bas', 'standard', 'premium']),
-  addons: z.array(z.enum(['extra', 'seo', 'copy', 'care'])).max(4).refine(values => new Set(values).size === values.length),
+  addons: z.array(z.enum(['extra', 'seo', 'copy', 'animation', 'care'])).max(5).refine(values => new Set(values).size === values.length),
 });
 export type OrderValues = z.infer<typeof orderSchema>;

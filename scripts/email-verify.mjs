@@ -19,7 +19,7 @@ globalThis.__emailTestEnv = {
   INQUIRY_RATE_LIMIT: { limit: async () => ({ success: true }) },
 };
 const { submitInquiry } = await import(pathToFileURL(`${process.cwd()}/.wrangler/tests/inquiry.mjs`));
-const values = { name: 'Test Åsa', email: 'conect.webbsmedjan@gmail.com', company: 'Test & <Studio>', message: 'Tydlig projektbeskrivning med åäö och <script>innehåll</script>.', consent: true, packageId: 'premium', addons: ['seo', 'extra'], total: 1, to: 'attacker@example.com' };
+const values = { name: 'Test Åsa', email: 'conect.webbsmedjan@gmail.com', company: 'Test & <Studio>', message: 'Tydlig projektbeskrivning med åäö och <script>innehåll</script>.', consent: true, packageId: 'premium', addons: ['seo', 'extra', 'animation'], total: 1, to: 'attacker@example.com' };
 const request = (data, headers = {}) => new Request('https://webbsmedjan.com/api/order', { method: 'POST', headers: { 'Content-Type': 'application/json', Origin: 'https://webbsmedjan.com', 'cf-connecting-ip': 'test-client', ...headers }, body: JSON.stringify(data) });
 let response = await submitInquiry(request(values), 'order');
 assert.equal(response.status, 200);
@@ -31,13 +31,21 @@ assert.match(sent[0].raw, /Reply-To: conect.webbsmedjan@gmail.com/);
 const parts = [...sent[0].raw.matchAll(/Content-Transfer-Encoding: base64\r\n\r\n([A-Za-z0-9+/=\r\n]+?)(?=\r\n--)/g)].map(match => Buffer.from(match[1].replaceAll('\r\n', ''), 'base64').toString('utf8'));
 assert.equal(parts.length, 2);
 assert.match(parts[0], /Premium/);
-assert.match(parts[0].replaceAll('\u00a0', ' '), /40 600 kr exklusive moms/);
+assert.match(parts[0].replaceAll('\u00a0', ' '), /8 100 kr exklusive moms/);
 assert.match(parts[0], /SEO-fördjupning/);
 assert.match(parts[0], /Extra sida/);
 assert.match(parts[1], /&lt;script&gt;/);
 assert.doesNotMatch(parts[1], /<script>/);
 assert.doesNotMatch(sent[0].raw, /attacker@example.com/);
-for (const bad of [{...values, consent:false}, {...values, packageId:'fake'}, {...values, addons:['seo','seo']}, {...values, website:'bot'}, {...values, message:'x'.repeat(5001)}, {...values, email:'x@example.com\r\nBcc: y@example.com'}]) {
+assert.match(parts[0], /Animationer/);
+assert.match(parts[0], /Företagstyp: Företag/);
+response = await submitInquiry(request({...values, isUf:true}), 'order');
+assert.equal(response.status, 200);
+const ufParts = [...sent[1].raw.matchAll(/Content-Transfer-Encoding: base64\r\n\r\n([A-Za-z0-9+/=\r\n]+?)(?=\r\n--)/g)].map(match => Buffer.from(match[1].replaceAll('\r\n', ''), 'base64').toString('utf8'));
+assert.match(ufParts[0], /Företagstyp: UF-företag/);
+assert.match(ufParts[0].replaceAll('\u00a0', ' '), /1 550 kr exklusive moms/);
+assert.equal(sent[1].to, 'conect.webbsmedjan@gmail.com');
+for (const bad of [{...values, isUf:'true'}, {...values, addons:['unknown']}, {...values, consent:false}, {...values, packageId:'fake'}, {...values, addons:['seo','seo']}, {...values, website:'bot'}, {...values, message:'x'.repeat(5001)}, {...values, email:'x@example.com\r\nBcc: y@example.com'}]) {
   assert.equal((await submitInquiry(request(bad), 'order')).status, 400);
 }
 assert.equal((await submitInquiry(request(values, {Origin:'https://other.example'}), 'order')).status, 403);
@@ -50,5 +58,5 @@ globalThis.__emailTestEnv.INQUIRY_EMAIL.send = async () => { throw new Error('De
 response = await submitInquiry(request(values), 'contact');
 assert.equal(response.status, 503);
 assert.equal((await response.json()).success, undefined);
-assert.equal(sent.length, 1);
-console.log('Email recipient, MIME, Swedish text, totals, escaping, validation, rate limit and delivery failure checks passed.');
+assert.equal(sent.length, 2);
+console.log('Email recipient, MIME, UF/company totals, escaping, validation, rate limit and delivery failure checks passed.');

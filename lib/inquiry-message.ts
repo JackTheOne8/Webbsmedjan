@@ -1,4 +1,4 @@
-import { packages, addons, money, site } from './site';
+import { packages, addons, money, site, priceFor } from './site';
 import type { ContactValues, OrderValues } from './schemas';
 
 export const inquirySender = 'formular@webbsmedjan.com';
@@ -16,9 +16,11 @@ export function createInquiryMessage(kind: 'order' | 'contact', values: ContactV
     const pack = packages.find(item => item.id === values.packageId)!;
     // Prices come from the server's catalogue, never from a submitted total.
     const chosen = addons.filter(item => values.addons.includes(item.id));
-    rows.push(['Paket', `${pack.name} – ${money(pack.price)}`]);
-    rows.push(['Tillval', chosen.length ? chosen.map(item => `${item.name} – ${money(item.price)}`).join('\n') : 'Inga tillval']);
-    rows.push(['Uppskattat totalpris', `${money(pack.price + chosen.reduce((sum, item) => sum + item.price, 0))} exklusive moms`]);
+    const isUf = values.isUf === true;
+    rows.push(['Företagstyp', isUf ? 'UF-företag' : 'Företag']);
+    rows.push(['Paket', `${pack.name} – ${money(priceFor(pack, isUf))}`]);
+    rows.push(['Tillval', chosen.length ? chosen.map(item => `${item.name} – ${money(priceFor(item, isUf))}`).join('\n') : 'Inga tillval']);
+    rows.push(['Uppskattat totalpris', `${money(priceFor(pack, isUf) + chosen.reduce((sum, item) => sum + priceFor(item, isUf), 0))} exklusive moms`]);
   }
   const note = kind === 'order' ? 'Detta är en beställningsförfrågan. Ingen betalning har genomförts. Bekräfta omfattning och pris i en separat offert.' : 'Besökaren vill komma i kontakt med Webbsmedjan.';
   const text = `${title}\n\n${rows.map(([label, value]) => `${label}: ${value}`).join('\n\n')}\n\nProjektbeskrivning / meddelande:\n${values.message}\n\nSamtycke till att hantera förfrågan: Ja\n\n${note}\n\nSvara på detta mejl för att kontakta ${values.name}.`;

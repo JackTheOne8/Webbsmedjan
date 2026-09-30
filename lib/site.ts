@@ -7,16 +7,19 @@ export const site = {
 };
 
 export const packages = [
-  { id: 'bas', name: 'Bas', price: 9900, intro: 'En skarp start för ett mindre företag.', features: ['Upp till 3 sidor', 'Mobilanpassad design', 'Kontaktformulär', 'Grundläggande SEO'] },
-  { id: 'standard', name: 'Standard', price: 19900, intro: 'Mer utrymme för er berättelse och era tjänster.', features: ['Upp till 7 sidor', 'Unik visuell riktning', 'Kontaktformulär', 'SEO och publiceringsstöd'] },
-  { id: 'premium', name: 'Premium', price: 34900, intro: 'En större webbplats med fler möjligheter.', features: ['Upp till 12 sidor', 'Skräddarsydda sektioner', 'Innehållsstöd', 'SEO och överlämning'] },
+  { id: 'bas', name: 'Bas', price: 2000, ufPrice: 350, features: ['Upp till 3 sidor', 'Kontaktformulär'] },
+  { id: 'standard', name: 'Standard', price: 4000, ufPrice: 700, features: ['Upp till 7 sidor', 'Personlig design'] },
+  { id: 'premium', name: 'Premium', price: 6500, ufPrice: 1200, features: ['Upp till 12 sidor', 'Innehållsstöd'] },
 ] as const;
 
 export const addons = [
-  { id: 'extra', name: 'Extra sida', price: 1800, detail: 'För en tjänst eller ett innehåll som behöver egen plats.' },
-  { id: 'seo', name: 'SEO-fördjupning', price: 3900, detail: 'Sökord, sidtitlar och innehållsstruktur.' },
-  { id: 'copy', name: 'Textstöd', price: 4900, detail: 'Vi hjälper er formulera tydliga texter.' },
-  { id: 'care', name: 'Underhåll, första året', price: 6900, detail: 'Löpande uppdateringar och teknisk tillsyn.' },
+  { id: 'extra', name: 'Extra sida', price: 400, ufPrice: 75, detail: 'Plats för mer innehåll.' },
+  { id: 'seo', name: 'SEO-fördjupning', price: 600, ufPrice: 125, detail: 'Sökord och sidtitlar.' },
+  { id: 'copy', name: 'Textstöd', price: 500, ufPrice: 100, detail: 'Hjälp med era texter.' },
+  { id: 'animation', name: 'Animationer', price: 600, ufPrice: 150, detail: 'Rörelse, hover och scroll.' },
+  { id: 'care', name: 'Underhåll, första året', price: 1200, ufPrice: 250, detail: 'Uppdateringar och tillsyn.' },
 ] as const;
+
+export const priceFor = (item: { price: number; ufPrice: number }, isUf = false) => isUf ? item.ufPrice : item.price;
 
 export const money = (value: number) => new Intl.NumberFormat('sv-SE').format(value) + ' kr';
