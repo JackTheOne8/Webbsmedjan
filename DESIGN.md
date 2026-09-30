@@ -6,9 +6,9 @@ Digital smedja: kallt stål möter varm glöd. Den av användaren tillhandahåll
 
 ## Tokens
 
-Källan för aktiva färger är `app/forge.css`: kol `#10191d`, stålyta `#1b272c`, djup yta `#26343a`, varmt vitt `#f6f2e9`, sekundär text `#b9c4c6`, glöd `#f27624`, linje `#405055`. `app/globals.css` innehåller grundlayout och äldre neutrala regler; `forge.css` är den aktiva visuella överskrivningen.
+Källan för aktiva färger är `app/atelier.css`: kol `#10151e`, stålyta `#1b2430`, djup yta `#283342`, varmt vitt `#f6f1e9`, sekundär text `#bec6d0`, glöd `#f69a62`, linje `#465263`. `app/globals.css` äger grundlayout, `forge.css` tidigare komponentregler och `atelier.css` den aktiva visuella förfiningen.
 
-Typografi: kondenserad systemdisplay (`Arial Narrow`/`Bahnschrift`), neutral sans för brödtext och spärrade versaler för små etiketter. Stora rubriker, luft mellan avsnitt och skarpa kanter med få undantag.
+Typografi: självhostad Barlow Condensed 700 för rubriker, Manrope 400/600/700 för brödtext och kontroller. Fontsource levererar font-display swap; inga Google Fonts-anrop. Rubriker har −0,025 em spärrning. Kolblå skuggor, varm koppar och genomskinliga stålytor ger djup. Glas används i navigation, videokontroller, tjänstekort och order/kontaktytor med tydliga kontraster. Rektangulära ytor får 6–16 px rundning och mjuka skuggor.
 
 ## Rörelse
 
@@ -37,3 +37,7 @@ Texten hålls kort på startsida, beställning och kontakt; samtycke, offertinfo
 Cookiepanelen är en modal dialog med inert bakgrund, intern fokusordning och återställt fokus. Escape väljer endast nödvändiga; blockerad lagring får inte låsa sidan. Formulär visar svenska, generiska fel och behåller uppgifter efter misslyckat utskick. Fälten låses under sändning och efter lyckad kvittens.
 
 CSP använder en nonce per dokument; script körs utan eval eller unsafe-inline i produktion. Inline style-attribut krävs för befintliga animationer. Videons minskade rörelse gäller även när ett sent autoplay-event kommer; manuell uppspelning är fortfarande tillåten.
+
+## Interaktivt 3D-koncept
+
+Startsidan visar ett facetterat, spetsigt metallobjekt i konceptsektionen, inspirerat av användarens bild. Three.js och miljöreflektioner laddas först nära sektionens scrollposition. Objektet har stål/koppar, musdragning, mobil dragning i sidled med bibehållen vertikal scroll, tangentbordsanvändbara rotationsknappar, paus och återställning. Minskad rörelse stänger av automatisk rotation; manuell rotation är möjlig. GPU-rendering pausas utanför vyn och när dokumentet är dolt. WebGL-fel visar svensk reservtext och behåller länken för projektförfrågan. Resurser och lyssnare frigörs när komponenten tas bort.

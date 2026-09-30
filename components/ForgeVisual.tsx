@@ -5,13 +5,17 @@ import { useHydratedReducedMotion } from '@/lib/use-hydrated-reduced-motion';
 export function ForgeVisual() {
   const videoRef = useRef<HTMLVideoElement>(null);
   const allowReducedPlayback = useRef(false);
-  const [paused, setPaused] = useState(false);
+  const [paused, setPaused] = useState(true);
   const reduce = useHydratedReducedMotion();
   useEffect(() => {
     if (reduce) {
       allowReducedPlayback.current = false;
       videoRef.current?.pause();
       setPaused(true);
+    } else {
+      // Set the muted property before play: Safari can reject attribute-only autoplay.
+      const video = videoRef.current;
+      if (video) { video.muted = true; void video.play().catch(() => setPaused(true)); }
     }
   }, [reduce]);
 
@@ -28,7 +32,7 @@ export function ForgeVisual() {
   }
 
   return <div className="hero-art hero-art-video">
-    <video ref={videoRef} className="hero-video" src="/webbsmedjan-laptop.mp4" poster="/webbsmedjan-laptop-poster.webp" autoPlay={!reduce} muted loop playsInline preload="metadata" onPlay={() => {
+    <video ref={videoRef} className="hero-video" src="/webbsmedjan-laptop.mp4" poster="/webbsmedjan-laptop-poster.webp" autoPlay={!reduce} muted loop playsInline preload="auto" onPlay={() => {
       // A late autoplay event can arrive after the preference effect has run.
       if (reduce && !allowReducedPlayback.current) { videoRef.current?.pause(); setPaused(true); }
       else setPaused(false);

@@ -1,6 +1,11 @@
 import type { Metadata } from 'next';
 import './globals.css';
 import './forge.css';
+import '@fontsource/barlow-condensed/latin-700.css';
+import '@fontsource/manrope/latin-400.css';
+import '@fontsource/manrope/latin-600.css';
+import '@fontsource/manrope/latin-700.css';
+import './atelier.css';
 import { Header } from '@/components/Header';
 import { Footer } from '@/components/Footer';
 import { CookieConsent } from '@/components/CookieConsent';

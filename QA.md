@@ -97,3 +97,11 @@ Tre omgångar genomförda: paket/transport/API-hårdning; verifierad korrigering
 Slutbygge och TypeScript passerade. verify, verify:links, verify:email och verify:security passerade. npm audit: 0 kända sårbarheter. Granskade bilder i qa/security/ på dator och mobil. Cookiepanelen fungerar också i 640x360: övre kant 20 px, nedre kant 340 px, internt scrollbart innehåll. Formulärens loading/fel/retry/success, bibehållna uppgifter, spärrat nytt klick, cookieval med blockerad/felaktig lagring, fokus, CSP-nonce och frånvaro av CSP-överträdelser verifierades.
 
 Cloudflare Always Use HTTPS ändrades till på och lägsta TLS till 1.2. HTTP /kontakt?test=https gav 301 till HTTPS med bevarad adress. Live-läsningar visade 404 för interna filer. Mönsterskanning gav inga hemlighetsmatchningar i 65 spårade filer eller 7 tidigare commits. Inga riktiga mejl eller belastningsattacker gjordes.
+
+## Glas, typografi och 3D, 2026-09-30
+
+Omgång 1: införde atelier.css med självhostad Barlow Condensed/Manrope, kolblå bakgrund, koppar och utvalda glasytor. Lade till lazy-loadad WebGL-skulptur i startsidans konceptdel, med rotation, paus, återställning och materialbyte. Videon får explicit muted play och preload auto. Inspekterade dator 1440 × 900 och mobil 390 × 844. verify och verify:design passerade, inklusive faktisk videouppspelning utan klick, WebGL, tangentbord, musdragning, axe och CSP.
+
+Omgång 2: mörkare stål och justerat reflektionsljus utifrån referensbilden. Inspekterade slutbilder på dator och mobil. check, build, verify:design och verify:email passerade. Minskad rörelse stoppar automatisk video/3D-rörelse; manuell uppspelning fungerar. WebGL-blockering visar reservtext med användbar projektlänk. Fysiska telefoner har inte testats. Webbläsare kan fortfarande blockera autostart av egna policyer; Spela video finns som reserv. Testerna skickar inga riktiga mejl.
+
+Bilder: qa/atelier/desktop-hero.png, mobile-hero.png, desktop-steel.png, mobile-steel.png samt material- och helsidesvyer.

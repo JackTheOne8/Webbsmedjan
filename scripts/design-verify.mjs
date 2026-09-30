@@ -1,0 +1,73 @@
+import { chromium } from 'playwright';
+import { mkdir } from 'node:fs/promises';
+import assert from 'node:assert/strict';
+import axe from 'axe-core';
+
+const base = process.env.BASE_URL || 'http://127.0.0.1:4180';
+await mkdir('qa/atelier', { recursive: true });
+const browser = await chromium.launch({ channel: 'msedge', headless: true, args: ['--enable-unsafe-swiftshader'] });
+try {
+  for (const [name, width, height] of [['desktop', 1440, 900], ['mobile', 390, 844]]) {
+    const page = await browser.newPage({ viewport: { width, height }, reducedMotion: 'no-preference' });
+    const errors = [], csp = [];
+    page.on('pageerror', e => errors.push(e.message));
+    await page.addInitScript(() => document.addEventListener('securitypolicyviolation', e => console.error('CSPTEST:' + e.violatedDirective)));
+    page.on('console', e => { if (e.text().startsWith('CSPTEST:')) csp.push(e.text()); });
+    await page.goto(base, { waitUntil: 'networkidle' });
+    await page.getByRole('button', { name: 'Endast nödvändiga' }).click();
+    await page.waitForFunction(() => { const video = document.querySelector('.hero-video'); return !video.paused && video.currentTime > .3; });
+    assert(await page.locator('.hero-video').evaluate(v => v.muted && v.loop), `${name}: muted looping autoplay`);
+    await page.getByRole('button', { name: 'Pausa video' }).click();
+    await page.evaluate(() => document.fonts.ready);
+    assert(await page.evaluate(() => document.fonts.check('700 80px "Barlow Condensed"')), `${name}: display font`);
+    await page.screenshot({ path: `qa/atelier/${name}-hero.png` });
+    const sculpture = page.locator('.sculpture-showcase');
+    await sculpture.scrollIntoViewIfNeeded();
+    await page.waitForFunction(() => document.querySelector('.sculpture-canvas').dataset.status === 'ready');
+    await sculpture.getByRole('button', { name: 'Pausa', exact: true }).click();
+    const before = await sculpture.screenshot({ path: `qa/atelier/${name}-steel.png` });
+    const rotate = sculpture.getByRole('button', { name: 'Rotera åt höger' });
+    await rotate.focus(); await page.keyboard.press('Enter');
+    const turned = await sculpture.screenshot();
+    assert(!before.equals(turned), `${name}: rotation changes rendered object`);
+    await sculpture.getByRole('button', { name: 'Stål', exact: true }).click();
+    assert.equal(await sculpture.getByRole('button', { name: 'Koppar', exact: true }).getAttribute('aria-pressed'), 'true');
+    const copper = await sculpture.screenshot({ path: `qa/atelier/${name}-copper.png` });
+    assert(!copper.equals(turned), `${name}: material changes rendered object`);
+    await sculpture.getByRole('button', { name: 'Återställ' }).click();
+    const canvas = page.locator('.sculpture-canvas');
+    const box = await canvas.boundingBox();
+    await page.mouse.move(box.x + box.width / 2, box.y + box.height / 2);
+    await page.mouse.down(); await page.mouse.move(box.x + box.width / 2 + 65, box.y + box.height / 2 + 15, { steps: 8 }); await page.mouse.up();
+    assert(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth), `${name}: no overflow`);
+    await page.evaluate(axe.source);
+    const accessibility = await page.evaluate(() => window.axe.run(document, { runOnly: { type: 'tag', values: ['wcag2a', 'wcag2aa', 'wcag21aa'] } }));
+    assert.deepEqual(accessibility.violations.map(v => ({ id: v.id, nodes: v.nodes.map(n => n.target) })), [], `${name}: accessibility`);
+    await page.evaluate(() => scrollTo(0, 0));
+    await page.screenshot({ path: `qa/atelier/${name}-home.png`, fullPage: true });
+    assert.deepEqual(errors, [], `${name}: runtime errors`); assert.deepEqual(csp, [], `${name}: CSP`);
+    await page.close();
+    console.log(`${name}: typography, autoplay, real WebGL, controls, materials, layout, axe and CSP passed`);
+  }
+  const reduced = await browser.newPage({ reducedMotion: 'reduce' });
+  await reduced.goto(base, { waitUntil: 'networkidle' });
+  await reduced.getByRole('button', { name: 'Endast nödvändiga' }).click();
+  await reduced.locator('.sculpture-showcase').scrollIntoViewIfNeeded();
+  await reduced.waitForFunction(() => document.querySelector('.sculpture-canvas').dataset.status === 'ready');
+  assert(await reduced.locator('.hero-video').evaluate(v => v.paused), 'reduced motion video paused');
+  assert.equal(await reduced.getByRole('button', { name: 'Rotera', exact: true }).getAttribute('aria-pressed'), 'false');
+  await reduced.close();
+  const fallback = await browser.newPage();
+  await fallback.addInitScript(() => {
+    const original = HTMLCanvasElement.prototype.getContext;
+    HTMLCanvasElement.prototype.getContext = function(type, ...args) { return type.startsWith('webgl') ? null : original.call(this, type, ...args); };
+  });
+  await fallback.goto(base, { waitUntil: 'networkidle' });
+  await fallback.getByRole('button', { name: 'Endast nödvändiga' }).click();
+  await fallback.locator('.sculpture-showcase').scrollIntoViewIfNeeded();
+  await fallback.getByText('3D-visningen stöds inte av din webbläsare.').waitFor();
+  assert(await fallback.getByRole('button', { name: 'Rotera åt höger' }).isDisabled());
+  assert(await fallback.getByRole('link', { name: /Skapa något eget/ }).isVisible());
+  await fallback.close();
+  console.log('Reduced motion and WebGL fallback passed. No emails sent.');
+} finally { await browser.close(); }
