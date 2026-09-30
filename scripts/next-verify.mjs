@@ -49,7 +49,7 @@ for (const [name, width, height] of [['desktop', 1440, 900], ['mobile', 390, 844
   await page.getByPlaceholder('Vad vill ni skapa? Vad behöver webbplatsen hjälpa er med?').fill('Vi vill skapa en tydlig webbplats för vårt företag.');
   await page.getByRole('checkbox', { name: /Jag godkänner/ }).check();
   await page.getByRole('button', { name: /Skicka beställningsförfrågan/ }).click();
-  check(await page.getByText(/Ingen e-post har skickats/).waitFor({ state: 'visible', timeout: 5000 }).then(() => true).catch(() => false), `${name}: valid order state`);
+  check(await page.getByText(/Din förfrågan har skickats/).waitFor({ state: 'visible', timeout: 5000 }).then(() => true).catch(() => false), `${name}: valid order state`);
   await page.evaluate(axe.source);
   const orderAxe = await page.evaluate(() => window.axe.run(document, { runOnly: { type: 'tag', values: ['wcag2a', 'wcag2aa', 'wcag21aa'] } }));
   check(orderAxe.violations.length === 0, `${name}: order accessibility ${orderAxe.violations.map(v => v.id).join(', ')}`);
@@ -80,7 +80,7 @@ await page.getByPlaceholder('Företagets namn').fill('Exempelföretaget AB');
 await page.getByPlaceholder('Vad vill ni skapa? Vad behöver webbplatsen hjälpa er med?').fill('Vi vill skapa en tydlig webbplats för vårt företag.');
 await page.getByRole('checkbox', { name: /Jag godkänner/ }).check();
 await page.getByRole('button', { name: /Skicka förfrågan/ }).click();
-check(await page.getByText(/Ingen e-post har skickats/).waitFor({ state: 'visible', timeout: 5000 }).then(() => true).catch(() => false), 'contact valid state');
+check(await page.getByText(/Din förfrågan har skickats/).waitFor({ state: 'visible', timeout: 5000 }).then(() => true).catch(() => false), 'contact valid state');
 check((await page.goto(`${base}/saknas`))?.status() === 404, '404 HTTP status');
 const bad = await page.request.post(`${base}/api/order`, { data: { packageId: 'fake' } });
 check(bad.status() === 400, 'invalid order API');

@@ -1,7 +1,7 @@
 export const site = {
   name: 'Webbsmedjan',
   url: process.env.NEXT_PUBLIC_SITE_URL || (process.env.NODE_ENV === 'production' ? 'https://webbsmedjan.com' : 'http://localhost:4180'),
-  email: 'hej@webbsmedjan.se',
+  email: 'conect.webbsmedjan@gmail.com',
   // Public production builds are crawlable; set the variable to "false" for previews.
   indexable: process.env.NODE_ENV === 'production' && process.env.NEXT_PUBLIC_SITE_INDEXABLE !== 'false',
 };

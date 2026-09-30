@@ -17,11 +17,11 @@ npm.cmd run dev
 
 ## Struktur
 
-- `app/`: sidor, metadata, sitemap, robots och API-stubbar.
+- `app/`: sidor, metadata, sitemap, robots och formulär-API.
 - `components/`: navigation, cookieval, formulär och orderbyggare.
 - `lib/`: gemensamt innehåll, priser och zod-scheman.
 - `public/`: favicon och Open Graph-bild.
 
-Beställning och kontakt har avsiktligt API-stubbar. De validerar men skickar eller lagrar ingenting. Riktiga företagsuppgifter, färdiga juridiska texter, beslutad prislista samt e-postleverans med serverhemligheter och skydd mot missbruk behövs för att göra erbjudandet komplett. Produktionsbygget tillåter indexering; sätt `NEXT_PUBLIC_SITE_INDEXABLE=false` om en förhandsversion inte ska hittas av sökmotorer. `https://webbsmedjan.com` används som standard för sitemap, canonical och metadata. Sätt `NEXT_PUBLIC_SITE_URL` om adressen ändras.
+Kontakt och beställning skickas via Cloudflares `INQUIRY_EMAIL`-binding till `conect.webbsmedjan@gmail.com`. Avsändaren är `formular@webbsmedjan.com`, och Reply-To är besökarens adress. Beställningsmejlet innehåller referens, kontaktuppgifter, paket, tillval, serverberäknat pris och projektbeskrivning i text och HTML. Kvittens visas först efter lyckad överlämning till Cloudflare. Email Routing måste vara aktiverat för webbsmedjan.com och Gmail-adressen verifierad. `cloudflare-bindings.json` används av Vite-bygget och innehåller mottagarbegränsning samt en gräns på fem förfrågningar per minut och IP. Lokalt simulerar Wrangler leveransen och sparar mejlen under `.wrangler/`; inga verkliga mejl skickas. Kör `node node_modules/wrangler/bin/wrangler.js types worker-configuration.d.ts --config cloudflare-bindings.json` efter ändrade bindings. `npm.cmd run verify:email` testar innehåll, validering och leveransfel utan riktiga utskick. Fullständiga företagsuppgifter och fastställda juridiska villkor behöver kompletteras. Produktionsbygget tillåter indexering; sätt `NEXT_PUBLIC_SITE_INDEXABLE=false` om en förhandsversion inte ska hittas av sökmotorer. `https://webbsmedjan.com` används som standard för sitemap, canonical och metadata. Sätt `NEXT_PUBLIC_SITE_URL` om adressen ändras.
 
 Den äldre statiska versionen finns kvar i `src/`, `build.mjs` och `dist/` som referens. Next.js använder inte dem.

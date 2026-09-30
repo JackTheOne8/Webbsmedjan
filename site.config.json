@@ -1,12 +1,11 @@
 {
   "name": "Webbsmedjan UF",
-  "url": "",
-  "email": "",
+  "url": "https://webbsmedjan.com",
+  "email": "conect.webbsmedjan@gmail.com",
   "phone": "",
   "school": "",
   "city": "",
   "organisationNumber": "",
-  "contactEnabled": false,
+  "contactEnabled": true,
   "privacyReady": false
 }
-
