@@ -19,6 +19,12 @@ for (const [name, width, height] of [['desktop', 1440, 900], ['mobile', 390, 844
   await page.screenshot({ path: `qa/next/${name}-home.png`, fullPage: true });
   await page.waitForFunction(() => document.querySelector('.hero-video')?.readyState >= 1);
   check(await page.locator('.hero-video').evaluate(video => video.loop && video.videoWidth > 0), `${name}: hero video loads and loops`);
+  await page.getByRole('button', { name:'Spela video' }).waitFor();
+  check(await page.locator('.hero-video').evaluate(video => video.paused), `${name}: reduced motion pauses video`);
+  await page.getByRole('button', { name:'Spela video' }).click();
+  await page.getByRole('button', { name:'Pausa video' }).waitFor();
+  check(await page.locator('.hero-video').evaluate(video => !video.paused), `${name}: explicit playback remains available`);
+  await page.getByRole('button', { name:'Pausa video' }).click();
   check(await page.locator('.concept-card').count() === 2, `${name}: homepage concepts`);
   await page.goto(`${base}/tjanster`, { waitUntil: 'networkidle' });
   check(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth), `${name}: services overflow`);
@@ -105,7 +111,7 @@ await page.route('**/api/contact', route => route.fulfill({ json: { success: tru
 await page.getByRole('button', { name: /Skicka förfrågan/ }).click();
 check(await page.getByText(/Din förfrågan har skickats/).waitFor({ state: 'visible', timeout: 5000 }).then(() => true).catch(() => false), 'contact valid state');
 check((await page.goto(`${base}/saknas`))?.status() === 404, '404 HTTP status');
-const bad = await page.request.post(`${base}/api/order`, { data: { packageId: 'fake' } });
+const bad = await page.request.post(`${base}/api/order`, { headers: { Origin: base }, data: { packageId: 'fake' } });
 check(bad.status() === 400, 'invalid order API');
 await browser.close();
 if (failures.length) { console.error(failures.join('\n')); process.exit(1); }

@@ -7,6 +7,7 @@ import { packages, addons, money, priceFor, site } from '@/lib/site';
 import { orderSchema, type OrderValues } from '@/lib/schemas';
 import { useHydratedReducedMotion } from '@/lib/use-hydrated-reduced-motion';
 import { InquiryFields } from './InquiryFields';
+import { sendInquiry } from '@/lib/send-inquiry';
 
 export function OrderBuilder() {
   const [result, setResult] = useState('');
@@ -26,10 +27,7 @@ export function OrderBuilder() {
   const submit = handleSubmit(async values => {
     setResult('');
     try {
-      const response = await fetch('/api/order', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(values) });
-      const data = await response.json() as { success?: boolean; message: string; error?: string };
-      if (!response.ok || !data.success) throw new Error(data.error || 'Mejlet kunde inte skickas. Försök igen.');
-      setResult(data.message);
+      setResult(await sendInquiry('order', values));
       setSent(true);
     } catch (error) {
       setResult(error instanceof Error ? error.message : `Försök igen eller mejla ${site.email}.`);

@@ -31,3 +31,9 @@ UF-reglaget är avstängt från början. Bas/Standard/Premium kostar 350/700/1 2
 Ett byte behåller paket, tillval och kontaktuppgifter. Reglagets tumme har en kort fjädrande rörelse och priser byts med en 180 ms entré; minskad rörelse ger direkt byte. Native radio/checkbox, ett namngivet ARIA-switch-reglage och en uppläst totalsumma bevarar tangentbordsflödet. Mobilen visar totalpris före skicka-knappen.
 
 Texten hålls kort på startsida, beställning och kontakt; samtycke, offertinformation och konceptmärkning behålls. Textfältet behåller native storleksändring för längre projektbeskrivningar. Cookieknappen använder befintlig händelselyssnare i `CookieConsent`.
+
+## Säkerhet och felåterhämtning
+
+Cookiepanelen är en modal dialog med inert bakgrund, intern fokusordning och återställt fokus. Escape väljer endast nödvändiga; blockerad lagring får inte låsa sidan. Formulär visar svenska, generiska fel och behåller uppgifter efter misslyckat utskick. Fälten låses under sändning och efter lyckad kvittens.
+
+CSP använder en nonce per dokument; script körs utan eval eller unsafe-inline i produktion. Inline style-attribut krävs för befintliga animationer. Videons minskade rörelse gäller även när ett sent autoplay-event kommer; manuell uppspelning är fortfarande tillåten.

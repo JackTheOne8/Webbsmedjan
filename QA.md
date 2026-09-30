@@ -89,3 +89,11 @@ Omgång 2: lade mobilens totalpris före skicka-knappen och rättade testerna f�
 Frontend Premium statisk audit kördes i strict med app/components/lib som aktiva källrötter. Två begränsningar kvar i statisk analys: den upptäcker inte CookieConsents befintliga event listener på sidfotens cookieknapp (funktion verifierad i browser-test), och den vill förbjuda textarea-resize som här medvetet behålls. Äldre ignorerad src/ används inte av den publicerade Vinext-appen.
 
 Skärmbilder: qa/next/desktop-order.png och mobile-order.png. Mejlleverans är simulerad i denna ändringsomgång; inga nya kundmejl skickades. Verklig Cloudflare-leverans till Gmail verifierades av användaren i föregående omgång. Fysiska telefoner har inte testats.
+
+## Säkerhets- och bugggranskning, 2026-09-30
+
+Tre omgångar genomförda: paket/transport/API-hårdning; verifierad korrigering av rotregel och Zod JIT för CSP; videons sena autoplay vid minskad rörelse. Se SECURITY-REVIEW.md för fynd och kvarvarande begränsningar.
+
+Slutbygge och TypeScript passerade. verify, verify:links, verify:email och verify:security passerade. npm audit: 0 kända sårbarheter. Granskade bilder i qa/security/ på dator och mobil. Cookiepanelen fungerar också i 640x360: övre kant 20 px, nedre kant 340 px, internt scrollbart innehåll. Formulärens loading/fel/retry/success, bibehållna uppgifter, spärrat nytt klick, cookieval med blockerad/felaktig lagring, fokus, CSP-nonce och frånvaro av CSP-överträdelser verifierades.
+
+Cloudflare Always Use HTTPS ändrades till på och lägsta TLS till 1.2. HTTP /kontakt?test=https gav 301 till HTTPS med bevarad adress. Live-läsningar visade 404 för interna filer. Mönsterskanning gav inga hemlighetsmatchningar i 65 spårade filer eller 7 tidigare commits. Inga riktiga mejl eller belastningsattacker gjordes.

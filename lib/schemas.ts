@@ -1,5 +1,8 @@
 import { z } from 'zod';
 
+// Zod's optional JIT uses eval; interpreted validation works with strict CSP.
+z.config({ jitless: true });
+
 export const contactSchema = z.object({
   name: z.string().trim().min(2, 'Ange ditt namn.').max(120, 'Namnet är för långt.'),
   email: z.email('Ange en giltig e-postadress.').max(254),

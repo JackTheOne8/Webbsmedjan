@@ -50,9 +50,29 @@ for (const bad of [{...values, isUf:'true'}, {...values, addons:['unknown']}, {.
 }
 assert.equal((await submitInquiry(request(values, {Origin:'https://other.example'}), 'order')).status, 403);
 assert.equal((await submitInquiry(request(values, {'Content-Type':'text/plain'}), 'order')).status, 415);
+assert.equal((await submitInquiry(request(values, {'Content-Type':'application/json-malicious'}), 'order')).status, 415);
+const noOrigin = request(values); noOrigin.headers.delete('Origin');
+assert.equal((await submitInquiry(noOrigin, 'order')).status, 403);
+assert.equal((await submitInquiry(request(values, {'Sec-Fetch-Site':'cross-site'}), 'order')).status, 403);
+assert.equal((await submitInquiry(new Request('https://webbsmedjan.com/api/order', { method:'POST', headers:{Origin:'https://webbsmedjan.com','Content-Type':'application/json'}, body:'{invalid' }), 'order')).status, 400);
 assert.equal((await submitInquiry(request({...values,message:'x'.repeat(25000)}), 'order')).status, 413);
+let chunksRead = 0, cancelled = false;
+const oversized = new Request('https://webbsmedjan.com/api/order', {
+  method:'POST', headers:{Origin:'https://webbsmedjan.com','Content-Type':'application/json'}, duplex:'half',
+  body:new ReadableStream({ pull(controller) { chunksRead++; controller.enqueue(new Uint8Array(4000)); if(chunksRead === 100) controller.close(); }, cancel() { cancelled = true; } }),
+});
+assert.equal((await submitInquiry(oversized, 'order')).status, 413);
+assert.ok(cancelled && chunksRead < 10, 'oversized chunked uploads stop at the limit');
+assert.equal(response.headers.get('cache-control'), 'no-store');
 globalThis.__emailTestEnv.INQUIRY_RATE_LIMIT.limit = async () => ({ success: false });
 assert.equal((await submitInquiry(request(values), 'order')).status, 429);
+let limiterKey;
+globalThis.__emailTestEnv.INQUIRY_RATE_LIMIT.limit = async ({key}) => { limiterKey = key; return {success:false}; };
+const noIp = request(values); noIp.headers.delete('cf-connecting-ip');
+const limited = await submitInquiry(noIp, 'order');
+assert.equal(limited.status, 429);
+assert.equal(limiterKey, 'inquiry:unknown');
+assert.equal(limited.headers.get('retry-after'), '60');
 globalThis.__emailTestEnv.INQUIRY_RATE_LIMIT.limit = async () => ({ success: true });
 globalThis.__emailTestEnv.INQUIRY_EMAIL.send = async () => { throw new Error('Delivery unavailable'); };
 response = await submitInquiry(request(values), 'contact');

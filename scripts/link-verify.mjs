@@ -14,13 +14,13 @@ try {
     const page = await browser.newPage({ viewport });
     await page.goto(origin, { waitUntil: 'networkidle' });
 
-    // Navigation must work before visitors have made a cookie choice.
+    // Dismiss the modal before exercising background navigation.
+    await page.getByRole('button', { name: 'Endast nödvändiga' }).click();
     if (device === 'mobile') await page.getByRole('button', { name: /Meny/ }).click();
     await page.getByRole('navigation', { name: 'Huvudmeny' }).getByRole('link', { name: 'Tjänster' }).click();
     if (new URL(page.url()).pathname !== '/tjanster') failures.push(`${device}: main navigation did not open /tjanster`);
 
     await page.goto(origin, { waitUntil: 'networkidle' });
-    await page.getByRole('button', { name: 'Endast nödvändiga' }).click();
     await page.getByRole('link', { name: 'Beställ webbsida' }).first().click();
     if (new URL(page.url()).pathname !== '/bestall') failures.push(`${device}: hero CTA did not open /bestall`);
 
