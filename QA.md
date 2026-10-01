@@ -123,3 +123,13 @@ Omgång 2: stoppade videon utan seek och kortade datorheron. verify:design passe
 Omgång 3: valde den öppna laptopen vid tre sekunder, gav mobilvideon ett bredare format och rättade glasets ogenomskinliga läge. Granskade dator- och mobilbilder. verify och verify:design passerade. Sista finjusteringen behåller radbrytningen i mobilens projektpanel och väntar in scrollentrén före skärmbilderna.
 
 TypeScript och produktionsbygge passerade. Inga verkliga mejl skickades. Automatiska kontroller ersätter inte test på fysiska telefoner eller en full WCAG-granskning. Videons autostart kan begränsas av webbläsarens egna inställningar. Bilder: qa/studio/desktop-hero.png, mobile-hero.png, desktop-glass.png, mobile-glass.png och helsidesvyer.
+
+## Videons autostart, 2026-10-01
+
+Omgång 1: reproducerade stillastående video i användarens öppna webbläsare: prefers-reduced-motion var true, autoplay false och currentTime 0. Användaren godkände uttryckligen automatisk video även med minskad rörelse. Tog bort videons koppling till rörelsepreferensen, väntar på synlig videoyta och stängd cookiepanel, behåller ljudlös inline-uppspelning och frysning vid öppen laptop. Videoytan kan pausas/startas om med klick, Enter eller Space utan separata kontrollknappar.
+
+Omgång 2: granskade skärmbilder av faktisk uppspelning på dator 1440 × 900 och mobil 390 × 844, och kontrollerade igen. video-verify och verify:design passerade. Regessionstestet täcker aktiv minskad rörelse, väntan bakom cookiepanelen, tangentbordspaus, återupptagning, stopp utanför vyn, fryst öppet läge, klick för omstart samt första uppspelning efter återställd scrollposition. Inga JavaScript-fel; axe och CSP passerade. TypeScript och produktionsbygge passerade. Inga riktiga mejl skickades. Fysiska telefoner ingår inte i kontrollen.
+
+Bilder: qa/video/desktop-playing.png, mobile-playing.png, desktop-open.png och mobile-open.png.
+
+Slutkontrollen verify passerade också: dator/mobil, orderflöde, cookieval, navigation, API-validering och formulär. Autostart verifieras före helsidesskärmbilden, eftersom skärmbildsverktyget tillfälligt ändrar sidans synliga område.

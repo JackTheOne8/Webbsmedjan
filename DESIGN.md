@@ -2,7 +2,7 @@
 
 ## Identitet
 
-Digital smedja: kallt stål möter varm glöd. Den av användaren tillhandahållna JPEG-loggan är original och visas oförändrad på sidan Om oss. Navigationen visar en beskuren vy av dess emblem. Heron visar användarens video där en laptop öppnas och visar en webbplats; videon startar tyst, visar en kort öppningssekvens och stannar med laptopen öppen. Stillbild visas medan den laddar. Inga videokontroller visas. Den återkommande orange färgen kommer från loggans text.
+Digital smedja: kallt stål möter varm glöd. Den av användaren tillhandahållna JPEG-loggan är original och visas oförändrad på sidan Om oss. Navigationen visar en beskuren vy av dess emblem. Heron visar användarens video där en laptop öppnas och visar en webbplats; videon startar tyst, visar en kort öppningssekvens och stannar med laptopen öppen. Stillbild visas medan den laddar. Inga separata videokontroller visas. Den återkommande orange färgen kommer från loggans text.
 
 ## Tokens
 
@@ -12,7 +12,7 @@ Typografi: självhostad Barlow Condensed 700 för rubriker, Manrope 400/600/700 
 
 ## Rörelse
 
-En tunn scrollindikator följer hela sidan. Hero-videon spelas automatiskt utan ljud i cirka tre sekunder och fryser sedan med laptopen öppen. Vid `prefers-reduced-motion` pausas den. Inga transportkontroller eller dekorativa videomärkningar visas. Processens glödlinje fylls i läsordning. Övriga avsnitt får en kort positionsentré utan att innehållet döljs. Hover ger lokal respons på knappar, tjänsterader och kort. Innehåll och val är alltid synliga.
+En tunn scrollindikator följer hela sidan. Hero-videon spelas automatiskt utan ljud i cirka tre sekunder och fryser sedan med laptopen öppen. På användarens uttryckliga önskemål gäller videons autostart även vid `prefers-reduced-motion`. Övriga animationer respekterar fortfarande minskad rörelse. Inga separata transportkontroller eller dekorativa videomärkningar visas. Klick eller Enter/Space direkt på videoytan pausar eller startar om sekvensen. Processens glödlinje fylls i läsordning. Övriga avsnitt får en kort positionsentré utan att innehållet döljs. Hover ger lokal respons på knappar, tjänsterader och kort. Innehåll och val är alltid synliga.
 
 ## Principer
 
@@ -36,7 +36,7 @@ Texten hålls kort på startsida, beställning och kontakt; samtycke, offertinfo
 
 Cookiepanelen är en modal dialog med inert bakgrund, intern fokusordning och återställt fokus. Escape väljer endast nödvändiga; blockerad lagring får inte låsa sidan. Formulär visar svenska, generiska fel och behåller uppgifter efter misslyckat utskick. Fälten låses under sändning och efter lyckad kvittens.
 
-CSP använder en nonce per dokument; script körs utan eval eller unsafe-inline i produktion. Inline style-attribut krävs för befintliga animationer. Videons minskade rörelse gäller även när ett sent autoplay-event kommer.
+CSP använder en nonce per dokument; script körs utan eval eller unsafe-inline i produktion. Inline style-attribut krävs för befintliga animationer. Videons synlighetskontroll stoppar sena autoplay-event när den ligger utanför vyn.
 
 ## Startsida – studio och glas
 
@@ -45,3 +45,7 @@ Startsidan har en bred video med en överlappande frostad projektpanel, en tjän
 Glas får en tät bakgrund där text ligger över video. `@supports` ger glasytan ett ogenomskinligt reservmaterial utan backdrop-filter. `prefers-reduced-transparency` tar bort genomskinligheten. Mobilen staplar panelerna och använder mindre rubriker. Befintliga tjänst-, beställnings- och konceptlänkar behålls.
 
 3D-sektionen, dess kontroller, geometri och Three.js-beroenden är borttagna enligt användarens önskemål. Videon stannar på sin uppspelade bild utan att söka till slutet; det undviker att lokal videoleverans återställer uppspelningen vid en seek.
+
+## Videons start och synlighet
+
+IntersectionObserver väntar tills minst 35 procent av videon syns. En öppen cookiepanel och en dold flik pausar uppspelningen. När cookiepanelen stängs eller videon blir synlig återupptas en oavslutad sekvens. En avslutad sekvens förblir fryst tills besökaren uttryckligen startar om den. Den synliga videoytan är en namngiven tangentbordsåtkomlig kontroll; inga extra knappar visas. `muted`, `defaultMuted` och `playsInline` används för ljudlös inline-uppspelning.

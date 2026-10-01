@@ -46,7 +46,9 @@ try {
   }
   const reduced = await browser.newPage({ reducedMotion: 'reduce' });
   await reduced.goto(base, { waitUntil: 'networkidle' });
-  assert(await reduced.locator('.hero-video').evaluate(v => v.paused), 'reduced motion pauses video');
+  await reduced.getByRole('button', { name: 'Endast nödvändiga' }).click();
+  await reduced.waitForFunction(() => document.querySelector('.hero-video').currentTime > .15);
+  assert(await reduced.locator('.hero-video').evaluate(v => v.muted), 'owner-approved reduced motion autoplay is silent');
   await reduced.close();
-  console.log('Reduced motion passed. No real emails sent.');
+  console.log('Owner-approved reduced motion autoplay passed. No real emails sent.');
 } finally { await browser.close(); }

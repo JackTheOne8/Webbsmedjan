@@ -34,6 +34,8 @@ Se `SECURITY-REVIEW.md` för fynd, åtgärder och avgränsningar. `npm.cmd run v
 
 ## Design
 
-`app/atelier.css` innehåller aktiva färger, typografi, glasytor och startsidans layout. Barlow Condensed och Manrope självhostas genom Fontsource. Hero-videon startar ljudlöst och stannar efter en kort öppningssekvens. Minskad rörelse ger en stillbild. 3D-sektionen och Three.js är borttagna.
+`app/atelier.css` innehåller aktiva färger, typografi, glasytor och startsidans layout. Barlow Condensed och Manrope självhostas genom Fontsource. Hero-videon startar ljudlöst och stannar efter en kort öppningssekvens. Videon startar när den syns och cookiepanelen är stängd, även med minskad rörelse enligt ägarens önskemål. Klick eller Enter/Space på videon pausar eller startar om den. 3D-sektionen och Three.js är borttagna.
 
-Kör `npm.cmd run verify:design` med servern igång för dator/mobil, glas, autostart och videons avslut, borttagna kontroller, projektlänk, minskad rörelse, axe och CSP. Skärmbilder sparas under `qa/studio/`. `BASE_URL` kan användas för samma kontroll på produktionen. Tester skickar inga riktiga mejl.
+Kör `npm.cmd run verify:design` med servern igång för dator/mobil, glas, autostart och videons avslut, borttagna kontroller, projektlänk, ägarens godkända autostart vid minskad rörelse, axe och CSP. Skärmbilder sparas under `qa/studio/`. `BASE_URL` kan användas för samma kontroll på produktionen. Tester skickar inga riktiga mejl.
+
+`node scripts/video-verify.mjs` testar videons start vid minskad rörelse, väntan på cookieval, tangentbordspaus, omstart och paus utanför vyn. `BASE_URL` stöds även här.
