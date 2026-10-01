@@ -8,7 +8,7 @@ await mkdir('qa/atelier', { recursive: true });
 const browser = await chromium.launch({ channel: 'msedge', headless: true, args: ['--enable-unsafe-swiftshader'] });
 try {
   for (const [name, width, height] of [['desktop', 1440, 900], ['mobile', 390, 844]]) {
-    const page = await browser.newPage({ viewport: { width, height }, reducedMotion: 'no-preference' });
+    const page = await browser.newPage({ viewport: { width, height }, reducedMotion: 'no-preference', hasTouch: name === 'mobile', isMobile: name === 'mobile' });
     const errors = [], csp = [];
     page.on('pageerror', e => errors.push(e.message));
     await page.addInitScript(() => document.addEventListener('securitypolicyviolation', e => console.error('CSPTEST:' + e.violatedDirective)));
@@ -37,6 +37,27 @@ try {
     await sculpture.getByRole('button', { name: 'Återställ' }).click();
     const canvas = page.locator('.sculpture-canvas');
     const box = await canvas.boundingBox();
+    await page.mouse.move(0, 0);
+    await page.waitForFunction(() => +document.querySelector('.sculpture-canvas').dataset.expansion < .01);
+    const rest = await canvas.screenshot();
+    await page.mouse.move(box.x + box.width / 2, box.y + box.height / 2);
+    await page.waitForFunction(() => +document.querySelector('.sculpture-canvas').dataset.expansion > .2);
+    const pulse = await canvas.screenshot({ path: `qa/atelier/${name}-hover-pulse.png` });
+    assert(!rest.equals(pulse), `${name}: hover separates visible fragments`);
+    await page.mouse.move(0, 0);
+    await page.waitForFunction(() => +document.querySelector('.sculpture-canvas').dataset.expansion < .01);
+    if (name === 'mobile') await sculpture.getByRole('button', { name: 'Explodera', exact: true }).tap();
+    else await sculpture.getByRole('button', { name: 'Explodera', exact: true }).click();
+    await page.waitForFunction(() => +document.querySelector('.sculpture-canvas').dataset.expansion > .9);
+    await sculpture.screenshot({ path: `qa/atelier/${name}-exploded.png` });
+    await sculpture.getByRole('button', { name: 'Samla', exact: true }).click();
+    await page.waitForFunction(() => +document.querySelector('.sculpture-canvas').dataset.expansion < .01);
+    await sculpture.getByRole('button', { name: 'Rotera', exact: true }).click();
+    await page.mouse.move(0, 0);
+    const rotatingBefore = await canvas.screenshot();
+    await page.waitForTimeout(500);
+    assert(!rotatingBefore.equals(await canvas.screenshot()), `${name}: automatic rotation`);
+    await sculpture.getByRole('button', { name: 'Pausa', exact: true }).click();
     await page.mouse.move(box.x + box.width / 2, box.y + box.height / 2);
     await page.mouse.down(); await page.mouse.move(box.x + box.width / 2 + 65, box.y + box.height / 2 + 15, { steps: 8 }); await page.mouse.up();
     assert(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth), `${name}: no overflow`);
@@ -56,6 +77,15 @@ try {
   await reduced.waitForFunction(() => document.querySelector('.sculpture-canvas').dataset.status === 'ready');
   assert(await reduced.locator('.hero-video').evaluate(v => v.paused), 'reduced motion video paused');
   assert.equal(await reduced.getByRole('button', { name: 'Rotera', exact: true }).getAttribute('aria-pressed'), 'false');
+  const reducedCanvas = reduced.locator('.sculpture-canvas');
+  const reducedBox = await reducedCanvas.boundingBox();
+  await reduced.mouse.move(reducedBox.x + reducedBox.width / 2, reducedBox.y + reducedBox.height / 2);
+  await reduced.waitForTimeout(200);
+  assert.equal(await reducedCanvas.getAttribute('data-expansion'), '0.000', 'reduced motion prevents hover pulse');
+  await reduced.getByRole('button', { name: 'Explodera', exact: true }).click();
+  await reduced.waitForFunction(() => +document.querySelector('.sculpture-canvas').dataset.expansion > .9);
+  await reduced.getByRole('button', { name: 'Återställ', exact: true }).click();
+  await reduced.waitForFunction(() => +document.querySelector('.sculpture-canvas').dataset.expansion < .01);
   await reduced.close();
   const fallback = await browser.newPage();
   await fallback.addInitScript(() => {

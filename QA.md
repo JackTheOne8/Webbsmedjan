@@ -105,3 +105,11 @@ Omgång 1: införde atelier.css med självhostad Barlow Condensed/Manrope, kolbl
 Omgång 2: mörkare stål och justerat reflektionsljus utifrån referensbilden. Inspekterade slutbilder på dator och mobil. check, build, verify:design och verify:email passerade. Minskad rörelse stoppar automatisk video/3D-rörelse; manuell uppspelning fungerar. WebGL-blockering visar reservtext med användbar projektlänk. Fysiska telefoner har inte testats. Webbläsare kan fortfarande blockera autostart av egna policyer; Spela video finns som reserv. Testerna skickar inga riktiga mejl.
 
 Bilder: qa/atelier/desktop-hero.png, mobile-hero.png, desktop-steel.png, mobile-steel.png samt material- och helsidesvyer.
+
+## Individuella 3D-fragment och musstyrd explosion, 2026-10-01
+
+Omgång 1: byggde om den sammanhängande geometrin till 320 individuellt transformerade fragment i ett InstancedMesh. Fasade tetraedriska delar, MeshPhysicalMaterial med klarlack och studio-reflektioner, individuell fjäderrespons, lokal muspuls, automatisk rotation och kamera som backar vid expansion. Lade till Explodera/Samla för touch och tangentbord. check, build och verify:design passerade. Granskade dator 1440 × 900 och mobil 390 × 844. Fann att mobilens expanderade silhuett överlappade instruktionen.
+
+Omgång 2: ökade mobilens avstånd mellan canvas och kontrollrad och stoppade GPU-rendering när objektet är pausat utan pågående rörelse. Nytt bygge, kontroll och verify:design passerade, inklusive faktisk touch-tap i mobil emulering, hover-utåtgång, automatisk återgång, explosion/samling, kontinuerlig rotation, materialbyte, minskad rörelse, reservläge, axe och CSP. Granskade nya mobilbilder och bekräftade fri hjälptext. Inga verkliga mejl skickades. Fysiska telefoner och bred hårdvaruprestandamätning ingår inte i denna kontroll.
+
+Bilder: qa/atelier/desktop-steel.png, desktop-hover-pulse.png, desktop-exploded.png och mobile-exploded.png. verify:design fungerar även med BASE_URL för produktionen.
