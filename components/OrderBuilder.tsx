@@ -1,4 +1,5 @@
 'use client';
+import { Icon } from '@/components/Icon';
 import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { useForm } from 'react-hook-form';
@@ -47,7 +48,7 @@ export function OrderBuilder() {
         <div className="uf-option">
           <label id="uf-label" htmlFor="uf-switch">Vi är ett UF-företag</label>
           <button id="uf-switch" type="button" role="switch" aria-checked={isUf} aria-labelledby="uf-label" aria-describedby="uf-price-note" className="uf-switch" onClick={() => setValue('isUf', !isUf, { shouldDirty: true })}>
-            <span className="uf-switch-track"><motion.span className="uf-switch-thumb" initial={false} animate={{ x: isUf ? 24 : 0 }} transition={reduceMotion ? { duration: 0 } : { type: 'spring', stiffness: 500, damping: 32 }}><span aria-hidden="true">{isUf ? '✓' : ''}</span></motion.span></span>
+            <span className="uf-switch-track"><motion.span className="uf-switch-thumb" initial={false} animate={{ x: isUf ? 24 : 0 }} transition={reduceMotion ? { duration: 0 } : { type: 'spring', stiffness: 500, damping: 32 }}><span aria-hidden="true">{isUf && <Icon name="check"/>}</span></motion.span></span>
           </button>
           <span id="uf-price-note">{isUf ? 'UF-priser från 350 kr' : 'Företagspriser från 2 000 kr'}</span>
         </div>
@@ -57,7 +58,7 @@ export function OrderBuilder() {
         <p className="package-common">Mobilanpassad design och grundläggande SEO ingår alltid.</p>
         <div className="package-grid">{packages.map(item => <label key={item.id} className={`package-card ${selected === item.id ? 'selected' : ''}`}>
           <input type="radio" value={item.id} {...register('packageId')}/>
-          <span className="package-top"><strong>{item.name}</strong><span className="package-selection" aria-hidden="true">{selected === item.id ? '✓' : '+'}</span></span>
+          <span className="package-top"><strong>{item.name}</strong><span className="package-selection" aria-hidden="true"><Icon name={selected === item.id ? 'check' : 'plus'}/></span></span>
           <span className="package-price">{price(item)}</span>
           <span className="package-features">{item.features.map(feature => <span key={feature}>{feature}</span>)}</span>
         </label>)}</div>
@@ -72,7 +73,7 @@ export function OrderBuilder() {
       <section aria-labelledby="details-title">
         <div className="order-step-heading"><p className="eyebrow">03 / KONTAKT</p><h2 id="details-title">Berätta om er.</h2></div>
         <InquiryFields register={register} errors={errors}/>
-        <div className="order-submit-row"><button className="button" disabled={busy} type="submit">{isSubmitting ? 'Skickar…' : sent ? 'Skickat' : 'Skicka beställningsförfrågan'} <span aria-hidden="true">↗</span></button><span>{money(total)} <small>exkl. moms</small></span></div>
+        <div className="order-submit-row"><button className="button" disabled={busy} type="submit">{isSubmitting ? 'Skickar…' : sent ? 'Skickat' : 'Skicka beställningsförfrågan'} <span aria-hidden="true"><Icon name="arrow-up-right"/></span></button><span>{money(total)} <small>exkl. moms</small></span></div>
         <p className="form-note">Ingen betalning nu. Vi återkommer med en offert.</p>
       </section>
     </fieldset>

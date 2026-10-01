@@ -133,3 +133,9 @@ Omgång 2: granskade skärmbilder av faktisk uppspelning på dator 1440 × 900 o
 Bilder: qa/video/desktop-playing.png, mobile-playing.png, desktop-open.png och mobile-open.png.
 
 Slutkontrollen verify passerade också: dator/mobil, orderflöde, cookieval, navigation, API-validering och formulär. Autostart verifieras före helsidesskärmbilden, eftersom skärmbildsverktyget tillfälligt ändrar sidans synliga område.
+
+## Enhetliga SVG-ikoner, 2026-10-01
+
+Omgång 1: ersatte textbaserade pilar, meny/stäng-symboler och paket/UF-markeringar med en gemensam inline-SVG-komponent. Gäller alla aktiva sidor, koncept, kontaktformulär, beställning, navigation och sidfot. Granskade dator 1440 × 900 och mobil 390 × 844, inklusive öppen mobilmeny, tjänster och UF/Standard-val. TypeScript, bygge och verify passerade, inklusive navigation, order/kontakt, cookieval och axe. Inga riktiga mejl skickades.
+
+Omgång 2: granskningen visade små pilar i knappar och paketmarkeringar. Gav dem fasta storlekar 18 respektive 16 px och tog nya bilder. Kontrollbilder finns under qa/icons/. SVG-formerna är oberoende av systemets emoji-font. Fysiska telefoner har inte kontrollerats.

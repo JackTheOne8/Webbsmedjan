@@ -49,3 +49,7 @@ Glas får en tät bakgrund där text ligger över video. `@supports` ger glasyta
 ## Videons start och synlighet
 
 IntersectionObserver väntar tills minst 35 procent av videon syns. En öppen cookiepanel och en dold flik pausar uppspelningen. När cookiepanelen stängs eller videon blir synlig återupptas en oavslutad sekvens. En avslutad sekvens förblir fryst tills besökaren uttryckligen startar om den. Den synliga videoytan är en namngiven tangentbordsåtkomlig kontroll; inga extra knappar visas. `muted`, `defaultMuted` och `playsInline` används för ljudlös inline-uppspelning.
+
+## Ikoner
+
+`components/Icon.tsx` samlar inline-SVG för pil, meny, stäng, check och plus. Inga Unicode-symboler eller ikonfonter används för dessa kontroller, så telefonens emoji-font kan inte ersätta dem. Ikoner är dekorativa, aria-hidden och inte fokuserbara; kontrollernas svenska namn och befintliga tangentbordsflöde behålls. Färg följer currentColor. Knapppilar är 18 px och paketmarkeringar 16 px.

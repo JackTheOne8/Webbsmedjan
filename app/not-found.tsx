@@ -1,2 +1,3 @@
+import { Icon } from '@/components/Icon';
 import Link from '@/components/SafeLink';
-export default function NotFound() { return <div className="page-hero shell" style={{ minHeight: '65vh' }}><p className="eyebrow">404 / FEL VÄG I VERKSTADEN</p><h1>Den här sidan<br/><em>finns inte än.</em></h1><p className="lead">Ibland leder en länk fel. Vi hjälper dig tillbaka till rätt ställe.</p><Link href="/" className="button">Till startsidan <span aria-hidden="true">↗</span></Link></div>; }
+export default function NotFound() { return <div className="page-hero shell" style={{ minHeight: '65vh' }}><p className="eyebrow">404 / FEL VÄG I VERKSTADEN</p><h1>Den här sidan<br/><em>finns inte än.</em></h1><p className="lead">Ibland leder en länk fel. Vi hjälper dig tillbaka till rätt ställe.</p><Link href="/" className="button">Till startsidan <span aria-hidden="true"><Icon name="arrow-up-right"/></span></Link></div>; }

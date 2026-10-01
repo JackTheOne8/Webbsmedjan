@@ -186,3 +186,8 @@ h3 { font-size: 30px; line-height: 1.1; }
 }
 @media (prefers-reduced-transparency: reduce) { .glass-panel, .film-brief.glass-panel, .site-header, .order-summary, .inquiry-form { background: #1c2a3b; backdrop-filter: none; -webkit-backdrop-filter: none; } }
 @media (prefers-reduced-motion: reduce) { .workshop-row h3, .workshop-row>span, .button { transition: none; } }
+
+/* Inline vectors avoid platform-dependent emoji glyphs for interface symbols. */
+.ui-icon { display: inline-block; width: 1em; height: 1em; flex-shrink: 0; vertical-align: -.12em; }
+.button .ui-icon, .nav-cta .ui-icon { width: 18px; height: 18px; }
+.package-selection .ui-icon { width: 16px; height: 16px; }
