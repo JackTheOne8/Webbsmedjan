@@ -18,13 +18,8 @@ for (const [name, width, height] of [['desktop', 1440, 900], ['mobile', 390, 844
   check(await page.evaluate(() => JSON.parse(localStorage.getItem('webbsmedjan-cookie-choice-v1')).statistics === false), `${name}: cookie choice`);
   await page.screenshot({ path: `qa/next/${name}-home.png`, fullPage: true });
   await page.waitForFunction(() => document.querySelector('.hero-video')?.readyState >= 1);
-  check(await page.locator('.hero-video').evaluate(video => video.loop && video.videoWidth > 0), `${name}: hero video loads and loops`);
-  await page.getByRole('button', { name:'Spela video' }).waitFor();
+  check(await page.locator('.hero-video').evaluate(video => !video.loop && video.videoWidth > 0 && !video.controls), `${name}: hero video loads without controls`);
   check(await page.locator('.hero-video').evaluate(video => video.paused), `${name}: reduced motion pauses video`);
-  await page.getByRole('button', { name:'Spela video' }).click();
-  await page.getByRole('button', { name:'Pausa video' }).waitFor();
-  check(await page.locator('.hero-video').evaluate(video => !video.paused), `${name}: explicit playback remains available`);
-  await page.getByRole('button', { name:'Pausa video' }).click();
   check(await page.locator('.concept-card').count() === 2, `${name}: homepage concepts`);
   await page.goto(`${base}/tjanster`, { waitUntil: 'networkidle' });
   check(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth), `${name}: services overflow`);

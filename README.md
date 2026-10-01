@@ -32,6 +32,8 @@ Se `SECURITY-REVIEW.md` för fynd, åtgärder och avgränsningar. `npm.cmd run v
 
 `middleware.ts` sätter en unik CSP-nonce för varje svar. `next.config.ts` och `public/_headers` skyddar dokument och statiska filer. Cloudflare har Always Use HTTPS aktiverat och lägsta TLS 1.2. Zods JIT är avstängd för att valideringen ska fungera utan eval i produktion. Formulär-API kräver samma Origin och JSON samt avbryter kroppar över 24 000 byte.
 
-## Design och 3D
+## Design
 
-app/atelier.css innehåller den aktiva färg- och typografiförfiningen. Barlow Condensed och Manrope självhostas genom Fontsource. ForgeSculpture laddar Three.js nära vyn och återanvänder samma komponentkontroller för dator/mobil. Kör npm.cmd run verify:design med servern igång för autostart, verklig WebGL-rendering, materialbyte, rotation, minskad rörelse, reservläge, axe och CSP. Skärmbilder sparas under qa/atelier/.
+`app/atelier.css` innehåller aktiva färger, typografi, glasytor och startsidans layout. Barlow Condensed och Manrope självhostas genom Fontsource. Hero-videon startar ljudlöst och stannar efter en kort öppningssekvens. Minskad rörelse ger en stillbild. 3D-sektionen och Three.js är borttagna.
+
+Kör `npm.cmd run verify:design` med servern igång för dator/mobil, glas, autostart och videons avslut, borttagna kontroller, projektlänk, minskad rörelse, axe och CSP. Skärmbilder sparas under `qa/studio/`. `BASE_URL` kan användas för samma kontroll på produktionen. Tester skickar inga riktiga mejl.

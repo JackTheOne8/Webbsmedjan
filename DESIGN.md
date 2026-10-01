@@ -2,17 +2,17 @@
 
 ## Identitet
 
-Digital smedja: kallt stål möter varm glöd. Den av användaren tillhandahållna JPEG-loggan är original och visas oförändrad på sidan Om oss. Navigationen visar en beskuren vy av dess emblem. Heron visar användarens video där en laptop öppnas och visar en webbplats; videon loopar, har en stillbild medan den laddar och kan pausas. Den återkommande orange färgen kommer från loggans text.
+Digital smedja: kallt stål möter varm glöd. Den av användaren tillhandahållna JPEG-loggan är original och visas oförändrad på sidan Om oss. Navigationen visar en beskuren vy av dess emblem. Heron visar användarens video där en laptop öppnas och visar en webbplats; videon startar tyst, visar en kort öppningssekvens och stannar med laptopen öppen. Stillbild visas medan den laddar. Inga videokontroller visas. Den återkommande orange färgen kommer från loggans text.
 
 ## Tokens
 
 Källan för aktiva färger är `app/atelier.css`: kol `#10151e`, stålyta `#1b2430`, djup yta `#283342`, varmt vitt `#f6f1e9`, sekundär text `#bec6d0`, glöd `#f69a62`, linje `#465263`. `app/globals.css` äger grundlayout, `forge.css` tidigare komponentregler och `atelier.css` den aktiva visuella förfiningen.
 
-Typografi: självhostad Barlow Condensed 700 för rubriker, Manrope 400/600/700 för brödtext och kontroller. Fontsource levererar font-display swap; inga Google Fonts-anrop. Rubriker har −0,025 em spärrning. Kolblå skuggor, varm koppar och genomskinliga stålytor ger djup. Glas används i navigation, videokontroller, tjänstekort och order/kontaktytor med tydliga kontraster. Rektangulära ytor får 6–16 px rundning och mjuka skuggor.
+Typografi: självhostad Barlow Condensed 700 för rubriker, Manrope 400/600/700 för brödtext och kontroller. Fontsource levererar font-display swap; inga Google Fonts-anrop. Rubriker har −0,025 em spärrning. Kolblå skuggor, varm koppar och genomskinliga stålytor ger djup. Glas används i navigation, herons överlappande projektpanel, fördelspanelen och order/kontaktytor med tydliga kontraster. Tjänster visas som luftiga rader. Rektangulära ytor får 6–16 px rundning och mjuka skuggor.
 
 ## Rörelse
 
-En tunn scrollindikator följer hela sidan. Hero-videon spelas automatiskt utan ljud och loopar. Vid `prefers-reduced-motion` pausas den och kan startas manuellt. Processens glödlinje fylls i läsordning. Övriga avsnitt får en kort positionsentré utan att innehållet döljs. Hover ger lokal respons på knappar, tjänsterader och kort. Innehåll och val är alltid synliga.
+En tunn scrollindikator följer hela sidan. Hero-videon spelas automatiskt utan ljud i cirka tre sekunder och fryser sedan med laptopen öppen. Vid `prefers-reduced-motion` pausas den. Inga transportkontroller eller dekorativa videomärkningar visas. Processens glödlinje fylls i läsordning. Övriga avsnitt får en kort positionsentré utan att innehållet döljs. Hover ger lokal respons på knappar, tjänsterader och kort. Innehåll och val är alltid synliga.
 
 ## Principer
 
@@ -36,12 +36,12 @@ Texten hålls kort på startsida, beställning och kontakt; samtycke, offertinfo
 
 Cookiepanelen är en modal dialog med inert bakgrund, intern fokusordning och återställt fokus. Escape väljer endast nödvändiga; blockerad lagring får inte låsa sidan. Formulär visar svenska, generiska fel och behåller uppgifter efter misslyckat utskick. Fälten låses under sändning och efter lyckad kvittens.
 
-CSP använder en nonce per dokument; script körs utan eval eller unsafe-inline i produktion. Inline style-attribut krävs för befintliga animationer. Videons minskade rörelse gäller även när ett sent autoplay-event kommer; manuell uppspelning är fortfarande tillåten.
+CSP använder en nonce per dokument; script körs utan eval eller unsafe-inline i produktion. Inline style-attribut krävs för befintliga animationer. Videons minskade rörelse gäller även när ett sent autoplay-event kommer.
 
-## Interaktivt 3D-koncept
+## Startsida – studio och glas
 
-Startsidan visar ett facetterat metallobjekt med 320 individuella fragment i konceptsektionen, inspirerat av användarens bild. Varje fragment har fasade kanter, egen orientering, storlek och fjädrande utåtgående rörelse. MeshPhysicalMaterial ger stål/koppar med studio- och klarlacksreflektioner. GPU-instancing håller fragmenten i ett enda draw call. Three.js och miljöreflektioner laddas först nära sektionens scrollposition.
+Startsidan har en bred video med en överlappande frostad projektpanel, en tjänstelista med tydliga rader och koncept i olika storlekar. Rubrikerna, mellanrummen och bildformaten skapar en redaktionell rytm. En varm och en kall ljusyta bakom fördelspanelen gör glasets genomskinlighet synlig. Tunna ljusa kanter och inset-skuggor ger materialet djup.
 
-Musens rörelse över formens sfäriska volym ger en lokal puls och får fragmenten att separera och vrida sig. De återgår mjukt när pekaren lämnar objektet. Objektet roterar kontinuerligt och kan dras för hand. Explodera/Samla ger motsvarande effekt med touch eller tangentbord. Minskad rörelse stänger av automatisk rotation och hover-puls; uttryckliga knappval visar den nya formen direkt. Kameraavståndet följer separationen för att hålla silhuetten inom rutan. Mobilen reserverar utrymme för två rader kontroller.
+Glas får en tät bakgrund där text ligger över video. `@supports` ger glasytan ett ogenomskinligt reservmaterial utan backdrop-filter. `prefers-reduced-transparency` tar bort genomskinligheten. Mobilen staplar panelerna och använder mindre rubriker. Befintliga tjänst-, beställnings- och konceptlänkar behålls.
 
-`lib/forge-scene.ts` äger geometri, material, fjädrar och WebGL-livscykel; `ForgeSculpture` äger React-kontrollerna. GPU-rendering pausas utanför vyn, när dokumentet är dolt och när objektet är pausat utan pågående rörelse. WebGL-fel visar svensk reservtext och behåller projektlänken. Resurser och lyssnare frigörs när komponenten tas bort.
+3D-sektionen, dess kontroller, geometri och Three.js-beroenden är borttagna enligt användarens önskemål. Videon stannar på sin uppspelade bild utan att söka till slutet; det undviker att lokal videoleverans återställer uppspelningen vid en seek.

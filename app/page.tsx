@@ -4,12 +4,28 @@ import { ForgeVisual } from '@/components/ForgeVisual';
 import { ForgeTimeline } from '@/components/ForgeTimeline';
 import { ConceptCard } from '@/components/ConceptCard';
 import { concepts } from '@/lib/concepts';
-import { ForgeSculpture } from '@/components/ForgeSculpture';
-export default function Home() { return <>
-  <section className="hero shell"><div className="hero-copy"><p className="eyebrow"><span className="ember-dot"/> EN DIGITAL SMEDJA FÖR FÖRETAG</p><h1>Vi smider webbplatser som <em>gör intryck.</em></h1><p className="lead">Webbplatser som gör ert företag lätt att hitta och enkelt att välja.</p><div className="actions"><Link href="/bestall" className="button">Beställ webbsida <span aria-hidden="true">↗</span></Link><Link href="/tjanster" className="inline-link">Utforska våra tjänster <span aria-hidden="true">↗</span></Link></div><p className="hero-note">BYGGT MED OMSORG · FÖR VERKLIGA FÖRETAG</p></div><ForgeVisual/></section>
-  <div className="ticker" aria-label="Webbdesign, utveckling, sökbarhet och support"><div>WEBBDESIGN <span>✳</span> UTVECKLING <span>✳</span> SÖKBARHET <span>✳</span> SUPPORT</div></div>
-  <section className="section shell"><Reveal><div className="section-head"><p className="eyebrow">VAD VI GÖR</p><h2>Rätt verktyg.<br/><em>Rätt resultat.</em></h2><p>Design, utveckling och support. Från första idé till färdig webb.</p></div></Reveal><div className="service-grid"><Reveal><article className="feature-card"><span className="card-icon">⌁</span><h3>Företagswebbplatser</h3><p>En snabb, personlig webbplats för ert företag.</p><Link href="/tjanster">Läs om webbplatser <span aria-hidden="true">↗</span></Link></article></Reveal><Reveal><article className="feature-card"><span className="card-icon">↗</span><h3>E-handel</h3><p>En butik som gör det enkelt att handla.</p><Link href="/tjanster">Läs om e-handel <span aria-hidden="true">↗</span></Link></article></Reveal><Reveal><article className="feature-card"><span className="card-icon">✳</span><h3>SEO & underhåll</h3><p>Bli hittade. Håll webbplatsen i form.</p><Link href="/tjanster">Läs om fortsättningen <span aria-hidden="true">↗</span></Link></article></Reveal></div></section>
-  <section className="section contrast-section"><div className="shell split"><Reveal><div><p className="eyebrow">VARFÖR WEBBSMEDJAN</p><h2>Digitalt hantverk,<br/><em>utan omvägar.</em></h2></div></Reveal><Reveal><div className="reasons"><div><span>01</span><div><h3>En kontakt hela vägen</h3><p>Vi håller dialogen nära och besluten begripliga från första skiss till färdig sida.</p></div></div><div><span>02</span><div><h3>Form som har en uppgift</h3><p>Designen ska hjälpa besökare att förstå er och ta nästa steg.</p></div></div><div><span>03</span><div><h3>Byggd för att hålla</h3><p>Vi prioriterar snabbhet, tillgänglighet och enkel vidareutveckling.</p></div></div></div></Reveal></div></section>
-  <section className="section shell inspiration-section"><Reveal><div className="section-head"><p className="eyebrow">UTVALDA KONCEPT</p><h2>Idéer tar form.</h2><p>Fiktiva koncept. Olika företag, egna uttryck.</p></div></Reveal><ForgeSculpture/><div className="project-grid">{concepts.slice(0, 2).map(concept => <Reveal key={concept.id}><ConceptCard concept={concept}/></Reveal>)}</div><Link href="/referenser" className="inline-link project-more">Se alla koncept <span aria-hidden="true">↗</span></Link></section>
-  <section className="section process-section"><div className="shell"><Reveal><p className="eyebrow">SÅ GÅR DET TILL</p><h2>Från första gnista<br/><em>till färdig webb.</em></h2></Reveal><ForgeTimeline/></div></section>
- </>; }
+
+export default function Home() { return <div className="studio-home">
+  <section className="studio-hero shell">
+    <div className="studio-title"><h1>Vi smider webbplatser<br/><em>som gör intryck.</em></h1><p>Webbsmedjan UF<br/>Digitalt hantverk, på riktigt.</p></div>
+    <div className="studio-film"><ForgeVisual/><div className="film-brief glass-panel"><p className="lead">Ert företag. <br/>Ett eget uttryck.</p><p>Webbplatser som gör er lätta att hitta och enkla att välja.</p><Link href="/bestall" className="button">Beställ webbsida <span aria-hidden="true">↗</span></Link></div></div>
+    <div className="hero-caption"><span>FRÅN FÖRSTA IDÉ TILL FÄRDIG WEBB</span><Link href="/tjanster">Utforska våra tjänster <span aria-hidden="true">↗</span></Link></div>
+  </section>
+  <section className="section shell workshop-section" aria-labelledby="workshop-title">
+    <Reveal><div className="workshop-intro"><h2 id="workshop-title">Form. Funktion.<br/><em>Och omtanke.</em></h2><p>Vi bygger, utvecklar och tar hand om er webbplats.</p></div></Reveal>
+    <div className="workshop-list">
+      <Link href="/tjanster" className="workshop-row"><div><h3>Företagswebbplatser</h3><p>En snabb, personlig webbplats för ert företag.</p></div><span aria-hidden="true">↗</span></Link>
+      <Link href="/tjanster" className="workshop-row"><div><h3>E-handel</h3><p>En butik som gör det enkelt att handla.</p></div><span aria-hidden="true">↗</span></Link>
+      <Link href="/tjanster" className="workshop-row"><div><h3>SEO & underhåll</h3><p>Bli hittade. Håll webbplatsen i form.</p></div><span aria-hidden="true">↗</span></Link>
+    </div>
+  </section>
+  <section className="section craft-section"><div className="shell">
+    <Reveal><h2>Nära er.<br/><em>Noga med detaljerna.</em></h2></Reveal>
+    <div className="craft-panel glass-panel"><article><h3>En kontakt hela vägen</h3><p>Nära dialog. Begripliga beslut.</p></article><article><h3>Form med en uppgift</h3><p>Hjälp besökaren att ta nästa steg.</p></article><article><h3>Byggd för att hålla</h3><p>Snabb, tillgänglig och enkel att utveckla.</p></article></div>
+  </div></section>
+  <section className="section shell inspiration-section">
+    <Reveal><div className="concept-heading"><h2>Olika idéer.<br/><em>Egna uttryck.</em></h2><div><p>Två riktningar att inspireras av.<br/>Fiktiva koncept, inga kunduppdrag.</p><Link href="/referenser" className="inline-link">Se alla koncept <span aria-hidden="true">↗</span></Link></div></div></Reveal>
+    <div className="project-grid studio-projects">{concepts.slice(0, 2).map(concept => <Reveal key={concept.id}><ConceptCard concept={concept}/></Reveal>)}</div>
+  </section>
+  <section className="section process-section"><div className="shell"><Reveal><h2>En idé blir verklighet.<br/><em>Steg för steg.</em></h2></Reveal><ForgeTimeline/></div></section>
+  </div>; }

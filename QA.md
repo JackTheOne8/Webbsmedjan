@@ -113,3 +113,13 @@ Omgång 1: byggde om den sammanhängande geometrin till 320 individuellt transfo
 Omgång 2: ökade mobilens avstånd mellan canvas och kontrollrad och stoppade GPU-rendering när objektet är pausat utan pågående rörelse. Nytt bygge, kontroll och verify:design passerade, inklusive faktisk touch-tap i mobil emulering, hover-utåtgång, automatisk återgång, explosion/samling, kontinuerlig rotation, materialbyte, minskad rörelse, reservläge, axe och CSP. Granskade nya mobilbilder och bekräftade fri hjälptext. Inga verkliga mejl skickades. Fysiska telefoner och bred hårdvaruprestandamätning ingår inte i denna kontroll.
 
 Bilder: qa/atelier/desktop-steel.png, desktop-hover-pulse.png, desktop-exploded.png och mobile-exploded.png. verify:design fungerar även med BASE_URL för produktionen.
+
+## Redaktionellt upplägg och glas, 2026-10-01
+
+Omgång 1: ersatte jämna kortsektioner med bred video, överlappande frostad projektpanel, tjänsterader och asymmetriska koncept. Glas i navigation, fördelspanel och formulär; bakgrundsljus i stål och koppar. Tog bort 3D-komponent, geometri och Three.js-beroenden samt videons kontroller. Granskade datorvyer. verify passerade. Designkontrollen fann att videons seek återställde tiden; beställningsknappen låg också för långt ned.
+
+Omgång 2: stoppade videon utan seek och kortade datorheron. verify:design passerade på dator och mobil, inklusive borttagen 3D, glas, CTA, axe, CSP och minskad rörelse. Granskade bilder i båda vyerna. Fann att vald stillbild visade en laddningssymbol och mobilens video beskars för hårt.
+
+Omgång 3: valde den öppna laptopen vid tre sekunder, gav mobilvideon ett bredare format och rättade glasets ogenomskinliga läge. Granskade dator- och mobilbilder. verify och verify:design passerade. Sista finjusteringen behåller radbrytningen i mobilens projektpanel och väntar in scrollentrén före skärmbilderna.
+
+TypeScript och produktionsbygge passerade. Inga verkliga mejl skickades. Automatiska kontroller ersätter inte test på fysiska telefoner eller en full WCAG-granskning. Videons autostart kan begränsas av webbläsarens egna inställningar. Bilder: qa/studio/desktop-hero.png, mobile-hero.png, desktop-glass.png, mobile-glass.png och helsidesvyer.
